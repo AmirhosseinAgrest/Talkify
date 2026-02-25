@@ -19,11 +19,24 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const httpServer = createServer(app);
 
-app.use(cors({
-  origin: process.env.CLIENT_URL,
+const corsOptions = {
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
   credentials: true,
-}));
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
+app.options('*', cors(corsOptions));
+
 app.use(express.json());
+
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 app.use('/uploads', express.static(path.join(__dirname, '../data/uploads')));
 
@@ -37,7 +50,6 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 const io = initializeSocket(httpServer);
-
 app.set('io', io);
 
 const PORT = process.env.PORT || 3001;
