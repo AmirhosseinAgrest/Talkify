@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.2] - 2026-02-25
+### 🛠️ Fixed
+- **API_URL undefined error**: Fixed missing environment variable in ChatItem component
+- **Date type error**: Fixed formatTime function to accept string inputs
+- **Type safety**: Improved type handling in utility functions
+
+### 🔧 Changed
+- Updated environment variable usage in frontend components
+- Improved error handling in date formatting functions
+- Enhanced type definitions for better TypeScript support
+
+---
+
 ## [1.0.1] - 2026-02-25
 ### 🛠️ Fixed
 - **CORS issue**: Fixed preflight request problem for login endpoint that was blocking frontend requests

@@ -44,7 +44,7 @@ export function ChatItem({ chat }: ChatItemProps) {
           </div>
         ) : (
           <Avatar>
-            <AvatarImage src={otherUser?.avatar ? `${API_URL}${otherUser.avatar}` : undefined} />
+            <AvatarImage src={otherUser?.avatar ? `${import.meta.env.VITE_API_URL}${otherUser.avatar}` : undefined} />
             <AvatarFallback>
               {otherUser?.username?.charAt(0).toUpperCase()}
             </AvatarFallback>
