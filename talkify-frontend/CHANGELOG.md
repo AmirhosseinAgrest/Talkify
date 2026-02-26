@@ -5,6 +5,18 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.1.2] - 2026-02-26
+
+### 🖼️ UI Update
+- Added new favicon (`talkify-icon.svg`) to improve branding and visual identity.
+- Updated `index.html` to reference the new icon.
+
+### 📁 Updated Files
+- `public/talkify-icon.svg`
+- `index.html`
+
+---
+
 ## [1.1.1] - 2026-02-26
 
 ### 🛠️ Fixes

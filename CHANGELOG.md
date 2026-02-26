@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.2] - 2026-02-26
+
+### 🖼️ UI Update
+- Added new favicon (`talkify-icon.svg`) to improve branding and visual identity.
+- Updated `index.html` to reference the new icon.
+
+### 📁 Updated Files
+- `public/talkify-icon.svg`
+- `index.html`
+
+---
+
 # v1.1.1 — Fix Chat Navigation
 
 This patch release fixes an issue where navigating to a chat from the user search dialog would still redirect to the old `chatId`-based URL instead of the new `username`-based route.
