@@ -20,10 +20,14 @@ import { suspensionService, Suspension } from '@/services/suspension.service';
 import { SystemChatInput } from '@/features/chat/components/SystemChatInput';
 import { toast } from 'sonner';
 import type { Message } from '@/types';
+import { chatService } from '@/services/chat.service';
 
 export default function ChatPage() {
-  const { chatId } = useParams();
-  const { isLoading } = useMessages(chatId);
+  const { username } = useParams<{ username: string }>();
+  const [chatId, setChatId] = useState<string | null>(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+
+  const { isLoading } = useMessages(chatId || undefined);
   const activeChat = useChatStore((state) => state.activeChat);
   const currentUser = useAuthStore((state) => state.user);
   const { joinChat, leaveChat, editMessage, deleteMessage, addReaction } = useSocketStore();
@@ -35,8 +39,25 @@ export default function ChatPage() {
   const [blockStatus, setBlockStatus] = useState<BlockStatus | null>(null);
   const [suspension, setSuspension] = useState<Suspension | null>(null);
   const [isCheckingStatus, setIsCheckingStatus] = useState(true);
-  const isSystemChat = activeChat?.participants.some((p) => p.isSystemAccount);
-  const otherUser = activeChat?.participants.find((p) => p.id !== currentUser?.id);
+
+  useEffect(() => {
+    const findChatByUsername = async () => {
+      if (!username || !currentUser) return;
+
+      setIsLoadingUser(true);
+      try {
+        const chatRes = await chatService.findOrCreateChat(username);
+        setChatId(chatRes.data.id);
+      } catch (error) {
+        console.error('Error finding chat:', error);
+        toast.error('Failed to load chat');
+      } finally {
+        setIsLoadingUser(false);
+      }
+    };
+
+    findChatByUsername();
+  }, [username, currentUser]);
 
   useEffect(() => {
     if (chatId) {
@@ -50,17 +71,16 @@ export default function ChatPage() {
   }, [chatId, joinChat, leaveChat]);
 
   useEffect(() => {
+    const otherUser = activeChat?.participants.find((p) => p.id !== currentUser?.id);
     if (otherUser?.id) {
-      checkStatus();
+      checkStatus(otherUser.id);
     }
-  }, [otherUser?.id]);
+  }, [activeChat, currentUser?.id]);
 
-  const checkStatus = async () => {
-    if (!otherUser?.id) return;
-
+  const checkStatus = async (userId: string) => {
     setIsCheckingStatus(true);
     try {
-      const blockRes = await blockService.checkStatus(otherUser.id);
+      const blockRes = await blockService.checkStatus(userId);
       setBlockStatus(blockRes.data);
 
       const suspensionRes = await suspensionService.checkMySuspension();
@@ -111,7 +131,9 @@ export default function ChatPage() {
   };
 
   const handleUnblock = async () => {
+    const otherUser = activeChat?.participants.find((p) => p.id !== currentUser?.id);
     if (!otherUser?.id) return;
+
     try {
       await blockService.unblock(otherUser.id);
       setBlockStatus({
@@ -125,16 +147,29 @@ export default function ChatPage() {
     }
   };
 
-  if (!chatId) {
+  if (!username) {
     return (
       <EmptyState
-        title="No chat selected"
-        description="Select a chat from the list on the right"
+        title="No user selected"
+        description="Select a user from the list on the right"
       />
     );
   }
 
-  if (isCheckingStatus) {
+  if (isLoadingUser) {
+    return <LoadingSpinner className="flex-1" />;
+  }
+
+  if (!chatId) {
+    return (
+      <EmptyState
+        title="Chat not found"
+        description="Could not find or create a chat with this user"
+      />
+    );
+  }
+
+  if (isLoading || isCheckingStatus) {
     return <LoadingSpinner className="flex-1" />;
   }
 
@@ -173,7 +208,7 @@ export default function ChatPage() {
 
       <TypingIndicator chatId={chatId} />
 
-      {isSystemChat ? (
+      {activeChat?.participants.some((p) => p.isSystemAccount) ? (
         <SystemChatInput />
       ) : (
         <ChatInput replyTo={replyTo} onCancelReply={handleCancelReply} />

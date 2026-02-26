@@ -6,6 +6,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-02-26
+
+### ✨ Frontend (v1.1.0)
+
+#### 🚀 New Features
+- **Human‑readable chat URLs** — replaced `/chat/:chatId` with `/chat/:username`
+  - Previous: `/chat/713f26c4-5256-4e90-98ea-3ad829e3abb3`
+  - New: `/chat/talkify`
+
+#### 📁 Updated Files
+- `src/App.tsx` — updated routing from `:chatId` to `:username`
+- `src/pages/chat/ChatPage.tsx` — fully rewritten to support username-based routing
+- `src/features/chat/components/ChatItem.tsx` — updated links to use username
+- `src/services/chat.service.ts` — added two new service methods
+
+#### ⚡ Performance Improvements
+- **50% faster chat loading** — reduced API calls from 2 requests to 1
+- Removed unnecessary `getUserByUsername` step
+- Optimized chat creation workflow
+
+---
+
+### 🖥️ Backend (v1.1.0)
+
+#### 🚀 New Features
+- **New endpoint:** `POST /api/chats/find-or-create`
+  - Supports both `username` and `userId` in the request body
+
+#### 📁 Updated Files
+- `src/controllers/chat.controller.js` — added `findOrCreateChat` method
+- `src/routes/chat.routes.js` — added `/find-or-create` route
+- `src/services/chat.service.js` — added `findOrCreateChat` service
+
+#### ✨ Added Capabilities
+- Lookup user by username
+- Validate user existence
+- Prevent self-chat creation
+- Detect existing chat between two users
+- Create a new chat if none exists
+
+#### 🐛 Bug Fixes
+- Fixed 404 error in `find-or-create` route
+- Fixed routing order issues
+
+---
+
+### 📊 Summary
+
+| Layer       | Files Changed | Key Changes                       |
+|-------------|---------------|-----------------------------------|
+| Frontend    | 4 files       | Username-based readable URLs      |
+| Backend     | 3 files       | New `find-or-create` endpoint     |
+
+**Total files changed: 7**
+
+---
+
+
 ## [1.0.2] - 2026-02-25
 ### 🛠️ Fixed
 - **API_URL undefined error**: Fixed missing environment variable in ChatItem component

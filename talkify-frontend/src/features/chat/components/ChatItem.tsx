@@ -16,7 +16,7 @@ interface ChatItemProps {
 
 export function ChatItem({ chat }: ChatItemProps) {
   const navigate = useNavigate();
-  const { chatId } = useParams();
+  const { chatId } = useParams(); 
   const setActiveChat = useChatStore((state) => state.setActiveChat);
   const currentUser = useAuthStore((state) => state.user);
 
@@ -26,7 +26,7 @@ export function ChatItem({ chat }: ChatItemProps) {
 
   const handleClick = () => {
     setActiveChat(chat);
-    navigate(`/chat/${chat.id}`);
+    navigate(`/chat/${otherUser?.username}`);
   };
 
   return (

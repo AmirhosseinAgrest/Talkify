@@ -23,4 +23,5 @@ router.delete('/messages/:messageId', chatController.deleteMessage);
 router.post('/messages/:messageId/reactions', chatController.addReaction);
 router.delete('/messages/:messageId/reactions', chatController.removeReaction);
 
+router.post('/find-or-create', chatController.findOrCreateChat);
 export default router;

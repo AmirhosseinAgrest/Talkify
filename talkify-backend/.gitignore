@@ -28,10 +28,6 @@ build
 /data/*.db
 /data/*.sqlite
 
-# Uploads - نگه داشتن پوشه خالی
-/data/uploads/*
-!/data/uploads/.gitkeep
-
 # PID files
 *.pid
 *.seed

@@ -73,6 +73,10 @@ export const getChatById = async (chatId, userId) => {
 };
 
 export const createChat = async (userId, participantId) => {
+  if (userId === participantId) {
+    throw formatError('Cannot create chat with yourself', 400);
+  }
+
   const participant = await db.getUserById(participantId);
   if (!participant) {
     throw formatError('User not found', 404);
@@ -86,6 +90,7 @@ export const createChat = async (userId, participantId) => {
   const newChat = {
     id: uuidv4(),
     participantIds: [userId, participantId],
+    type: 'private',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   };
@@ -294,4 +299,32 @@ export const canSendMessage = async (chatId, senderId) => {
     return isSender;
   }
   return true;
+};
+
+export const findOrCreateChat = async (userId, targetUserId) => {
+  const targetUser = await db.getUserById(targetUserId);
+  if (!targetUser) {
+    throw formatError('User not found', 404);
+  }
+
+  if (userId === targetUserId) {
+    throw formatError('Cannot chat with yourself', 400);
+  }
+
+  const existingChat = await db.getChatByParticipants(userId, targetUserId);
+  if (existingChat) {
+    return await getChatById(existingChat.id, userId);
+  }
+
+  const newChat = {
+    id: uuidv4(),
+    participantIds: [userId, targetUserId],
+    type: 'private',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  await db.createChat(newChat);
+
+  return await getChatById(newChat.id, userId);
 };

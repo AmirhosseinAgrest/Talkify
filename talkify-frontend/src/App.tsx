@@ -1,7 +1,7 @@
 // src/App.tsx
 
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from 'sonner';
@@ -95,7 +95,7 @@ function AppContent() {
 
         <Route element={<MainLayout />}>
           <Route path="/chat" element={<ChatPage />} />
-          <Route path="/chat/:chatId" element={<ChatPage />} />
+          <Route path="/chat/:username" element={<ChatPage />} />
           <Route path="/channel/:channelId" element={<ChannelPage />} />
         </Route>
 

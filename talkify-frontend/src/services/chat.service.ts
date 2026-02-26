@@ -19,6 +19,16 @@ export const chatService = {
     return response.data;
   },
 
+  findOrCreateChat: async (username: string): Promise<ApiResponse<Chat>> => {
+    const response = await api.post('/chats/find-or-create', { username });
+    return response.data;
+  },
+
+  findOrCreateChatWithUser: async (userId: string): Promise<ApiResponse<Chat>> => {
+    const response = await api.post('/chats/find-or-create', { userId });
+    return response.data;
+  },
+
   sendMessageWithFile: async (
     chatId: string,
     formData: FormData,

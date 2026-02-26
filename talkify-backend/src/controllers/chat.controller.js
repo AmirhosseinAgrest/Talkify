@@ -1,5 +1,6 @@
 // src/controllers/chat.controller.js
 
+import * as db from '../services/db.service.js';
 import * as chatService from '../services/chat.service.js';
 import { formatResponse } from '../utils/helpers.js';
 import { getMessageType } from '../middleware/upload.middleware.js';
@@ -172,6 +173,50 @@ export const sendMessageWithFile = async (req, res, next) => {
     }
 
     res.status(201).json(formatResponse(true, message));
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const findOrCreateChat = async (req, res, next) => {
+  try {
+    const { userId, username } = req.body;
+    let targetUserId = userId;
+
+    if (username && !userId) {
+      const users = await db.getUsers();
+      const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
+      
+      if (!user) {
+        return res.status(404).json(
+          formatResponse(false, null, 'User not found with this username')
+        );
+      }
+      targetUserId = user.id;
+    }
+
+    if (!targetUserId) {
+      return res.status(400).json(
+        formatResponse(false, null, 'Either userId or username is required')
+      );
+    }
+
+    const user = await db.getUserById(targetUserId);
+    if (!user) {
+      return res.status(404).json(
+        formatResponse(false, null, 'User not found')
+      );
+    }
+
+    if (targetUserId === req.userId) {
+      return res.status(400).json(
+        formatResponse(false, null, 'Cannot create chat with yourself')
+      );
+    }
+
+    const chat = await chatService.findOrCreateChat(req.userId, targetUserId);
+    res.status(201).json(formatResponse(true, chat));
+    
   } catch (error) {
     next(error);
   }

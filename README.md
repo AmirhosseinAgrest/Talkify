@@ -50,27 +50,6 @@ This project demonstrates real engineering ability — not just UI work.
 
 ---
 
-## 📁 Project Structure
-
-```bash
-frontend/
-  components/
-  hooks/
-  pages/
-  services/
-  store/
-  utils/
-
-backend/
-  services/
-  controllers/
-  db/
-  routes/
-  utils/
-```
-
----
-
 ## 🔐 Security & Access Control
 - Users can only access chats they participate in
 
@@ -96,6 +75,9 @@ if (!chat.participantIds.includes(userId)) {
 ```bash
 git clone https://github.com/AmirhosseinAgrest/Talkify.git
 cd talkify
+cd talkify-frontend
+npm install
+cd talkify-backend
 npm install
 ```
 
@@ -105,6 +87,7 @@ npm install
 ### Frontend:
 
 ```bash
+cd talkify-frontend
 npm run dev
 ```
 
