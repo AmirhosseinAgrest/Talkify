@@ -5,6 +5,21 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.1.1] - 2026-02-26
+
+### 🛠️ Fixes
+- Fixed chat navigation to correctly use **username-based URLs** instead of falling back to `chatId`.
+- Updated `NewChatDialog.tsx` to ensure `navigate(`/chat/${user.username}`)` is used after creating or finding a chat.
+- Added missing `useNavigate` import and initialization to prevent fallback routing behavior.
+
+### 📁 Updated Files
+- `src/features/chat/components/NewChatDialog.tsx`
+
+### 🔍 Summary
+This update ensures that all chat navigation is fully aligned with the new readable URL system (`/chat/:username`) and prevents accidental routing to legacy `chatId` URLs.
+
+---
+
 ## [1.1.0] - 2026-02-26
 
 ### 🚀 New Features

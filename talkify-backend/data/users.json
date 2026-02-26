@@ -5,8 +5,8 @@
     "email": "email@gmail.com",
     "password": "$2a$12$z/mmz7XX/3fvRGHWxo4PoOV4fXeSP0UNX7cLp2dzY.A6kWUcZAfEO",
     "avatar": "/uploads/avatars/65ae6b30-fefb-4ff6-8c67-79f5d685d317.png",
-    "isOnline": false,
-    "lastSeen": "2026-02-26T08:40:09.836Z",
+    "isOnline": true,
+    "lastSeen": "2026-02-26T12:34:21.801Z",
     "isVerified": true,
     "verifiedAt": "2025-12-02T16:21:14.719Z",
     "verifiedBy": "system",
@@ -36,5 +36,20 @@
     "role": "system",
     "isSystemAccount": true,
     "createdAt": "2025-12-03T12:01:57.845Z"
+  },
+  {
+    "id": "e7abadb6-fa75-4957-b47b-4a5043e9db9f",
+    "username": "aaaaaaa",
+    "email": "con.o.rql48@googlemail.com",
+    "password": "$2a$12$9uzgZeKNGHeR0.GrxFEmeOtwQEGqvl5jI6C68eslMlDK6zKvHMIT.",
+    "avatar": null,
+    "bio": null,
+    "phone": null,
+    "isOnline": true,
+    "lastSeen": "2026-02-26T12:48:18.707Z",
+    "isVerified": false,
+    "isSystemAccount": false,
+    "role": "user",
+    "createdAt": "2026-02-26T12:48:17.949Z"
   }
 ]

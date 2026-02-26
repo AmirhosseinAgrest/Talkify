@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+# v1.1.1 — Fix Chat Navigation
+
+This patch release fixes an issue where navigating to a chat from the user search dialog would still redirect to the old `chatId`-based URL instead of the new `username`-based route.
+
+## Frontend (v1.1.1)
+- Corrected navigation logic in `NewChatDialog.tsx` to use `/chat/:username`.
+- Added missing `useNavigate` hook.
+- Ensured consistent behavior with the new readable chat URL system.
+
+---
+
 ## [1.1.0] - 2026-02-26
 
 ### ✨ Frontend (v1.1.0)

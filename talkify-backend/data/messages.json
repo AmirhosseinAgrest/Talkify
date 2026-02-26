@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "b6cee9d6-22f5-4b47-b66b-f37dd74a1ed8",
+    "chatId": "6a710f56-b264-4085-9302-0b3e7b0d6a0c",
+    "senderId": "system-support-account",
+    "content": "👋 Hi aaaaaaa!\n\nWelcome to Talkify! 🎉\n\nWe're excited to have you here. In this messenger, you can:\n\n✅ Chat with your friends  \n✅ Follow different channels  \n✅ Send photos, videos, and files  \n✅ And enjoy many more features!\n\nIf you have any questions, feel free to ask here (our support team reviews all messages).\n\nBest regards,  \nThe Talkify Team 💙",
+    "type": "text",
+    "systemMessageType": "welcome",
+    "isSystemMessage": true,
+    "status": "seen",
+    "createdAt": "2026-02-26T12:48:17.962Z",
+    "updatedAt": "2026-02-26T12:48:17.962Z"
+  },
+  {
+    "id": "6c538544-c335-4f9b-80f7-ab4f7c04a36a",
+    "chatId": "64aeeda0-514c-43d8-bf34-ff3c05ba0731",
+    "senderId": "65ae6b30-fefb-4ff6-8c67-79f5d685d317",
+    "content": "hi",
+    "type": "text",
+    "fileUrl": null,
+    "fileName": null,
+    "fileSize": null,
+    "replyToId": null,
+    "replyTo": null,
+    "isEdited": false,
+    "isDeleted": false,
+    "reactions": [],
+    "status": "seen",
+    "createdAt": "2026-02-26T13:53:43.141Z",
+    "updatedAt": "2026-02-26T13:53:43.141Z"
+  }
+]

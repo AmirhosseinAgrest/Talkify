@@ -1,1 +1,32 @@
-[]
+[
+  {
+    "id": "e605568f-49de-4547-b6f3-57d55bc18ebf",
+    "participantIds": [
+      "65ae6b30-fefb-4ff6-8c67-79f5d685d317",
+      "system-support-account"
+    ],
+    "type": "private",
+    "createdAt": "2026-02-26T12:17:03.476Z",
+    "updatedAt": "2026-02-26T12:17:03.476Z"
+  },
+  {
+    "id": "6a710f56-b264-4085-9302-0b3e7b0d6a0c",
+    "participantIds": [
+      "system-support-account",
+      "e7abadb6-fa75-4957-b47b-4a5043e9db9f"
+    ],
+    "isSystemChat": true,
+    "createdAt": "2026-02-26T12:48:17.960Z",
+    "updatedAt": "2026-02-26T12:48:17.976Z"
+  },
+  {
+    "id": "64aeeda0-514c-43d8-bf34-ff3c05ba0731",
+    "participantIds": [
+      "65ae6b30-fefb-4ff6-8c67-79f5d685d317",
+      "e7abadb6-fa75-4957-b47b-4a5043e9db9f"
+    ],
+    "type": "private",
+    "createdAt": "2026-02-26T13:53:27.274Z",
+    "updatedAt": "2026-02-26T13:53:43.143Z"
+  }
+]
