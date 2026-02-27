@@ -14,9 +14,12 @@ export interface User {
   isSuspended?: boolean;
   suspendedUntil?: string;
   role: 'user' | 'admin' | 'super_admin' | 'system'; 
+  country: string | null; 
   settings?: UserSettings;
   createdAt: string;
   updatedAt?: string;
+  loginLogs?: LoginLog[];
+  sessions?: Session[];
 }
 
 export interface Message {
@@ -96,11 +99,40 @@ export interface LoginForm {
   password: string;
 }
 
-export interface RegisterForm {
+export type LoginRequest = {
+  email: string;
+  password: string;
+};
+
+export type RegisterRequest = {
+  username: string;
+  email: string;
+  password: string;
+};
+
+export type RegisterForm = {
   username: string;
   email: string;
   password: string;
   confirmPassword: string;
+};
+
+export interface LoginLog {
+  id: string;
+  country: string;
+  device: string;
+  ipHash: string | null;
+  createdAt: string;
+}
+
+export interface Session {
+  id: string;
+  device: string;
+  country: string;
+  ipHash: string | null;
+  isActive: boolean;
+  createdAt: string;
+  lastActiveAt: string;
 }
 
 export interface CreateChannelForm {

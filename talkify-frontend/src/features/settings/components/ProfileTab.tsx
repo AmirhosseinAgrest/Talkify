@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Camera, Loader2, Trash2 } from 'lucide-react';
+import { Camera, Loader2, Trash2, Copy } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,6 +32,17 @@ export function ProfileTab() {
     const [isUploading, setIsUploading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const [showAllLogs, setShowAllLogs] = useState(false);
+    const [showAllSessions, setShowAllSessions] = useState(false);
+
+    const loginLogs = user?.loginLogs ?? [];
+    const sessions = user?.sessions ?? [];
+
+    function copyText(text: string) {
+        navigator.clipboard.writeText(text);
+        toast.success('Copied!');
+    }
 
     const {
         register,
@@ -195,6 +206,155 @@ export function ProfileTab() {
             </form>
 
             <Separator />
+
+            <div className="space-y-4">
+                <h4 className="text-sm font-medium">Security & Login Activity</h4>
+
+                <div className="text-sm text-muted-foreground">
+                    <p>
+                        Country:{' '}
+                        <span className="font-medium">
+                            {user?.country || 'Unknown'}
+                        </span>
+                    </p>
+                </div>
+
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                        <h5 className="text-sm font-medium">Login History</h5>
+
+                        {loginLogs.length > 1 && (
+                            <button
+                                onClick={() => setShowAllLogs(!showAllLogs)}
+                                className="text-xs text-primary hover:underline"
+                            >
+                                {showAllLogs ? 'Hide' : 'View all'}
+                            </button>
+                        )}
+                    </div>
+
+                    {loginLogs.length ? (
+                        <div className="space-y-2">
+                            {(showAllLogs
+                                ? [...loginLogs].reverse()
+                                : [loginLogs[loginLogs.length - 1]]
+                            ).map((log) => {
+                                const textToCopy = `
+Device: ${log.device}
+Country: ${log.country}
+IP Hash: ${log.ipHash}
+Date: ${new Date(log.createdAt).toLocaleString()}
+          `.trim();
+
+                                return (
+                                    <div
+                                        key={log.id}
+                                        className="relative p-3 border rounded-md bg-muted/30"
+                                    >
+                                        <button
+                                            onClick={() => copyText(textToCopy)}
+                                            className="absolute top-2 right-2 text-muted-foreground hover:text-primary"
+                                        >
+                                            <Copy className="h-4 w-4" />
+                                        </button>
+
+                                        <p className="text-sm break-all">
+                                            <span className="font-medium">Device:</span> {log.device}
+                                        </p>
+                                        <p className="text-sm break-all">
+                                            <span className="font-medium">Country:</span> {log.country}
+                                        </p>
+                                        <p className="text-sm break-all">
+                                            <span className="font-medium">IP Hash:</span> {log.ipHash}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                            {new Date(log.createdAt).toLocaleString()}
+                                        </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground">No login logs found.</p>
+                    )}
+                </div>
+
+                <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                        <h5 className="text-sm font-medium">Active Sessions</h5>
+
+                        {sessions.length > 1 && (
+                            <button
+                                onClick={() => setShowAllSessions(!showAllSessions)}
+                                className="text-xs text-primary hover:underline"
+                            >
+                                {showAllSessions ? 'Hide' : 'View all'}
+                            </button>
+                        )}
+                    </div>
+
+                    {sessions.length ? (
+                        <div className="space-y-2">
+                            {(showAllSessions
+                                ? [...sessions].reverse()
+                                : [sessions[sessions.length - 1]]
+                            ).map((session) => {
+                                const textToCopy = `
+Device: ${session.device}
+Country: ${session.country}
+IP Hash: ${session.ipHash}
+Status: ${session.isActive ? 'Active' : 'Inactive'}
+Created: ${new Date(session.createdAt).toLocaleString()}
+Last Active: ${new Date(session.lastActiveAt).toLocaleString()}
+          `.trim();
+
+                                return (
+                                    <div
+                                        key={session.id}
+                                        className="relative p-3 border rounded-md bg-muted/30"
+                                    >
+                                        <button
+                                            onClick={() => copyText(textToCopy)}
+                                            className="absolute top-2 right-2 text-muted-foreground hover:text-primary"
+                                        >
+                                            <Copy className="h-4 w-4" />
+                                        </button>
+
+                                        <p className="text-sm break-all">
+                                            <span className="font-medium">Device:</span> {session.device}
+                                        </p>
+                                        <p className="text-sm break-all">
+                                            <span className="font-medium">Country:</span> {session.country}
+                                        </p>
+                                        <p className="text-sm break-all">
+                                            <span className="font-medium">IP Hash:</span> {session.ipHash}
+                                        </p>
+                                        <p className="text-sm">
+                                            <span className="font-medium">Status:</span>{' '}
+                                            {session.isActive ? (
+                                                <span className="text-green-600">Active</span>
+                                            ) : (
+                                                <span className="text-red-600">Inactive</span>
+                                            )}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                            Created: {new Date(session.createdAt).toLocaleString()}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground">
+                                            Last Active: {new Date(session.lastActiveAt).toLocaleString()}
+                                        </p>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground">No sessions found.</p>
+                    )}
+                </div>
+            </div>
+
+            <Separator />
+
 
             <div className="space-y-2">
                 <h4 className="text-sm font-medium">Account Information</h4>

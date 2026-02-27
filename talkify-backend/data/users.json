@@ -1,20 +1,23 @@
 [
   {
     "id": "65ae6b30-fefb-4ff6-8c67-79f5d685d317",
-    "username": "Amirhossein Agrest",
-    "email": "email@gmail.com",
-    "password": "$2a$12$z/mmz7XX/3fvRGHWxo4PoOV4fXeSP0UNX7cLp2dzY.A6kWUcZAfEO",
+    "username": "AmirhosseinAgrest",
+    "email": "agrest@talkify.com",
+    "password": "$2a$12$z2NjKye1ZoLCGd3BcXahheHNSMle3a3C.s7ZhPAQbQ2JDRSIhXele",
     "avatar": "/uploads/avatars/65ae6b30-fefb-4ff6-8c67-79f5d685d317.png",
     "isOnline": true,
-    "lastSeen": "2026-02-26T14:14:22.850Z",
+    "lastSeen": "2025-12-02T16:21:14.719Z",
     "isVerified": true,
     "verifiedAt": "2025-12-02T16:21:14.719Z",
     "verifiedBy": "system",
     "role": "super_admin",
+    "country": null,
     "createdAt": "2025-12-02T07:49:39.038Z",
+    "loginLogs": [],
+    "sessions": [],
     "isSuspended": false,
     "suspendedUntil": null,
-    "updatedAt": "2025-12-17T11:07:54.530Z",
+    "updatedAt": "2026-02-27T10:38:24.994Z",
     "bio": "I am Amirhossein Agrest, the creator of the messaging app Talkify.",
     "phone": "",
     "settings": {
@@ -29,12 +32,22 @@
     "avatar": "/uploads/avatars/system-avatar.png",
     "bio": "Official Talkify Support Account",
     "isOnline": true,
-    "lastSeen": "2025-12-03T12:51:41.963Z",
+    "lastSeen": "2025-12-03T12:01:57.845Z",
     "isVerified": true,
     "verifiedAt": "2025-12-03T12:01:57.845Z",
     "verifiedBy": "system",
     "role": "system",
     "isSystemAccount": true,
-    "createdAt": "2025-12-03T12:01:57.845Z"
+    "country": null,
+    "createdAt": "2025-12-03T12:01:57.845Z",
+    "loginLogs": [],
+    "sessions": [],
+     "isSuspended": false,
+    "suspendedUntil": null,
+    "updatedAt": "2025-12-03T12:01:57.845Z",
+    "phone": "",
+    "settings": {
+      "showReadReceipts": true
+    }
   }
 ]

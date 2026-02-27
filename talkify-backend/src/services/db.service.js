@@ -79,11 +79,13 @@ export const getChatsByUserId = async (userId) => {
 
 export const getChatByParticipants = async (userId1, userId2) => {
   const chats = await getChats();
-  return chats.find(
-    (chat) =>
-      chat.participantIds.includes(userId1) &&
-      chat.participantIds.includes(userId2)
-  ) || null;
+  return (
+    chats.find(
+      (chat) =>
+        chat.participantIds.includes(userId1) &&
+        chat.participantIds.includes(userId2)
+    ) || null
+  );
 };
 
 export const createChat = async (chatData) => {
@@ -142,7 +144,6 @@ export const updateMessageStatus = async (messageId, status) => {
   return await updateMessage(messageId, { status });
 };
 
-
 export const getChannels = async () => {
   return await readJsonFile('channels.json');
 };
@@ -196,7 +197,6 @@ export const deleteMessage = async (id) => {
   await writeJsonFile('messages.json', filtered);
 };
 
-
 export const getReactions = async () => {
   return await readJsonFile('reactions.json');
 };
@@ -208,15 +208,16 @@ export const getReactionsByMessageId = async (messageId) => {
 
 export const addReaction = async (reactionData) => {
   const reactions = await getReactions();
-  
+
   const existing = reactions.find(
-    (r) => r.messageId === reactionData.messageId && 
-           r.userId === reactionData.userId &&
-           r.emoji === reactionData.emoji
+    (r) =>
+      r.messageId === reactionData.messageId &&
+      r.userId === reactionData.userId &&
+      r.emoji === reactionData.emoji
   );
-  
+
   if (existing) return existing;
-  
+
   reactions.push(reactionData);
   await writeJsonFile('reactions.json', reactions);
   return reactionData;
@@ -225,11 +226,15 @@ export const addReaction = async (reactionData) => {
 export const removeReaction = async (messageId, userId, emoji) => {
   const reactions = await getReactions();
   const filtered = reactions.filter(
-    (r) => !(r.messageId === messageId && r.userId === userId && r.emoji === emoji)
+    (r) =>
+      !(
+        r.messageId === messageId &&
+        r.userId === userId &&
+        r.emoji === emoji
+      )
   );
   await writeJsonFile('reactions.json', filtered);
 };
-
 
 export const getReports = async () => {
   return await readJsonFile('reports.json');
@@ -251,11 +256,11 @@ export const updateReport = async (id, updates) => {
   const reports = await getReports();
   const index = reports.findIndex((r) => r.id === id);
   if (index === -1) return null;
+
   reports[index] = { ...reports[index], ...updates };
   await writeJsonFile('reports.json', reports);
   return reports[index];
 };
-
 
 export const getBlocks = async () => {
   return await readJsonFile('blocks.json');
@@ -273,7 +278,9 @@ export const getBlockedByUserId = async (userId) => {
 
 export const isBlocked = async (blockerId, blockedId) => {
   const blocks = await getBlocks();
-  return blocks.some((b) => b.blockerId === blockerId && b.blockedId === blockedId);
+  return blocks.some(
+    (b) => b.blockerId === blockerId && b.blockedId === blockedId
+  );
 };
 
 export const createBlock = async (blockData) => {
@@ -298,9 +305,11 @@ export const getSuspensions = async () => {
 export const getActiveSuspension = async (userId) => {
   const suspensions = await getSuspensions();
   const now = new Date();
-  return suspensions.find(
-    (s) => s.userId === userId && s.isActive && new Date(s.expiresAt) > now
-  ) || null;
+  return (
+    suspensions.find(
+      (s) => s.userId === userId && s.isActive && new Date(s.expiresAt) > now
+    ) || null
+  );
 };
 
 export const createSuspension = async (suspensionData) => {
@@ -314,6 +323,7 @@ export const updateSuspension = async (id, updates) => {
   const suspensions = await getSuspensions();
   const index = suspensions.findIndex((s) => s.id === id);
   if (index === -1) return null;
+
   suspensions[index] = { ...suspensions[index], ...updates };
   await writeJsonFile('suspensions.json', suspensions);
   return suspensions[index];

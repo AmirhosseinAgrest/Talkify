@@ -12,12 +12,19 @@ export function useRegister() {
   const login = useAuthStore((state) => state.login);
 
   return useMutation({
-    mutationFn: (data: RegisterForm) => authService.register(data),
+    mutationFn: (data: RegisterForm) =>
+      authService.register({
+        username: data.username,
+        email: data.email,
+        password: data.password,
+      }),
+
     onSuccess: (response) => {
       login(response.data.user, response.data.token);
       toast.success('Signup successful! 🎉');
       navigate('/chat');
     },
+
     onError: (error: any) => {
       toast.error(error.response?.data?.message || 'Signup error');
     },

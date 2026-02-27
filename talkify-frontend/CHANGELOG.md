@@ -5,6 +5,60 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## v1.2.0 — Security UI & Auth Integration Update (2026-02-27)
+
+### 🔐 New Security UI in Profile Settings
+- Added **Security & Login Activity** section.
+- Displays:
+  - Country
+  - Last login
+  - Last active session
+  - Full login history (with “View all” toggle)
+  - Full session history (with “View all” toggle)
+- Added copy button for each log/session card.
+- Added `break-all` to prevent long IP hashes from overflowing UI.
+
+### 🧠 Auth Store & API Improvements
+- Updated `useAuthStore` to match new backend session architecture.
+- Updated `api.ts`:
+  - Removed forced redirect on 401.
+  - Improved token handling.
+  - Ensured compatibility with sessionId-based JWT.
+- Updated `authService` to use new request types:
+  - `LoginRequest`
+  - `RegisterRequest`
+
+### 🧩 TypeScript Enhancements
+- Updated `User` interface to include:
+  - `country`
+  - `loginLogs`
+  - `sessions`
+- Added new interfaces:
+  - `LoginLog`
+  - `Session`
+- Removed all TypeScript errors related to undefined fields.
+
+### 🎨 UI/UX Improvements
+- Improved ProfileTab layout.
+- Added safe fallback values for missing data.
+- Added loading states and better error messages.
+- Improved avatar upload/delete flow.
+
+### 🧹 Cleanup
+- Removed unused components and old logic.
+- Improved consistency of formatting and naming.
+- Cleaned up form validation and default values.
+
+---
+
+## Notes
+This frontend update is fully compatible with Backend v1.2.0 and unlocks future features like:
+- Terminate session
+- Logout from all devices
+- Security tab with advanced controls
+
+---
+
 ## [1.1.2] - 2026-02-26
 
 ### 🖼️ UI Update

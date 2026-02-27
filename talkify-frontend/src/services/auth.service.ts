@@ -1,7 +1,12 @@
 // src/services/auth.service.ts
 
 import { api } from '@/lib/api';
-import type { User, LoginForm, RegisterForm, ApiResponse } from '@/types';
+import type {
+  User,
+  ApiResponse,
+  LoginRequest,
+  RegisterRequest,
+} from '@/types';
 
 interface AuthResponse {
   user: User;
@@ -9,12 +14,14 @@ interface AuthResponse {
 }
 
 export const authService = {
-  login: async (data: LoginForm): Promise<ApiResponse<AuthResponse>> => {
+  login: async (data: LoginRequest): Promise<ApiResponse<AuthResponse>> => {
     const response = await api.post('/auth/login', data);
     return response.data;
   },
 
-  register: async (data: RegisterForm): Promise<ApiResponse<AuthResponse>> => {
+  register: async (
+    data: RegisterRequest
+  ): Promise<ApiResponse<AuthResponse>> => {
     const response = await api.post('/auth/register', data);
     return response.data;
   },

@@ -5,6 +5,51 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## v1.2.0 — Security & Session Architecture Upgrade (2026-02-27)
+
+### 🔐 Security System Overhaul
+- Added device-based session tracking stored directly inside each user object.
+- Added login activity logs (device, country, IP hash, timestamp).
+- Added automatic session creation on login.
+- Added automatic session deactivation on logout.
+- Added country detection using IP (with privacy-first hashing).
+- Added device detection using User-Agent parsing.
+- Added sessionId to JWT payload for future multi-device control.
+- Removed `login_logs.json` and `sessions.json` in favor of unified user-based storage.
+
+### 🧠 Authentication Improvements
+- Rebuilt `auth.service.js` to:
+  - Store loginLogs and sessions inside user.
+  - Update country only on first valid login.
+  - Hash IP addresses using SHA-256.
+  - Track lastSeen and isOnline accurately.
+- Improved error handling and fallback logic for GeoIP detection.
+- Improved password hashing and validation flow.
+
+### 🗂 Database Layer Changes
+- Cleaned up `db.service.js`:
+  - Removed all login log and session file operations.
+  - Simplified user update logic.
+  - Ensured backward compatibility for existing users.
+- Unified all security-related data inside `users.json`.
+
+### 🧹 Cleanup & Refactoring
+- Removed unused code paths.
+- Improved structure of authentication modules.
+- Added safer defaults for missing IP or User-Agent.
+- Improved consistency of timestamps across the system.
+
+---
+
+## Notes
+This backend update prepares the system for:
+- Terminating individual sessions
+- Logging out from all devices
+- Email notifications for new logins
+- Admin security dashboards
+
+---
+
 ## [1.1.0] - 2026-02-26
 
 ### 🚀 New Features

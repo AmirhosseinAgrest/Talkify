@@ -6,6 +6,57 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## v1.2.0 — Security Upgrade Release (2026-02-27)
+
+### 🔐 Major Security Enhancements
+- Added full device/session tracking stored directly inside each user object.
+- Added login activity logs (device, country, IP hash, timestamp).
+- Added session management with `isActive`, `createdAt`, `lastActiveAt`.
+- Added automatic session creation on login.
+- Added automatic session deactivation on logout.
+- Added country detection using IP (with privacy-first hashing).
+- Added device detection using User-Agent parsing.
+- Removed separate `login_logs.json` and `sessions.json` files.
+- Unified all security data inside `users.json`.
+
+### 🧠 Backend Improvements
+- Rebuilt `auth.service.js` to store loginLogs and sessions inside user.
+- Updated JWT to include `sessionId` for future multi-device control.
+- Improved logout logic to deactivate all sessions for the user.
+- Cleaned up `db.service.js` and removed unused log/session functions.
+- Improved IP hashing and country detection fallback behavior.
+
+### 🎨 Frontend Enhancements
+- Added Security & Login Activity section in Profile settings.
+- Shows:
+  - Country
+  - Last login
+  - Last active session
+  - “View all” toggle for full history
+  - Copy button for each log/session
+- Added safe TypeScript types for:
+  - `LoginLog`
+  - `Session`
+  - Updated `User` interface
+- Improved UI with `break-all` to prevent overflow of long IP hashes.
+
+### 🧹 Cleanup & Refactoring
+- Removed unused API endpoints.
+- Removed old session/log storage files.
+- Improved TypeScript safety across the app.
+- Updated Zustand store to match new auth flow.
+
+---
+
+## Notes
+This update lays the foundation for future features:
+- Terminate individual sessions
+- Logout from all devices
+- Security tab with advanced controls
+- Email notifications for new logins
+
+---
+
 ## [1.1.2] - 2026-02-26
 
 ### 🖼️ UI Update

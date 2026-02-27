@@ -5,14 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/store/useAuthStore';
 import { toast } from 'sonner';
-import type { LoginForm } from '@/types';
+import type { LoginRequest } from '@/types';
 
 export function useLogin() {
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
 
   return useMutation({
-    mutationFn: (data: LoginForm) => authService.login(data),
+    mutationFn: (data: LoginRequest) => authService.login(data),
+
     onSuccess: (response) => {
       console.log('✅ Login API response:', response);
 
@@ -31,6 +32,7 @@ export function useLogin() {
         navigate('/chat');
       }, 100);
     },
+
     onError: (error: any) => {
       console.error('❌ Login error:', error);
       toast.error(error.response?.data?.message || 'Login error');
