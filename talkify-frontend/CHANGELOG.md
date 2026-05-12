@@ -5,6 +5,37 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.3.0] - 2026-05-12
+
+### Added - New Features
+
+#### Channel Editing Feature
+- **Professional channel information editing**
+  - Ability to edit channel name, username, and description by channel owner
+  - Edit button visible only to channel owner
+  - Edit form with Cancel and Save functionality
+
+#### Avatar Management
+- **Professional avatar upload and management**
+  - Avatar upload with drag & drop and file selection
+  - File type and size validation (images only, max 5MB)
+  - Avatar preview before upload
+  - Ability to change and remove avatar
+  - Upload using multipart/form-data
+
+#### Technical Improvements
+- **Fixed state inconsistency in Dialog**
+  - Added `useEffect` to reset state when channel changes
+  - Prevented data mixing between different channels
+- **Improved mobile user experience**
+  - Optimized display on small screens
+  - Added `truncate` and `shrink-0` to prevent overflow
+- **Real-time store synchronization**
+  - Store updates after every edit
+  - Instant display of changes in channel header
+
+---
+
 ## v1.2.0 — Security UI & Auth Integration Update (2026-02-27)
 
 ### 🔐 New Security UI in Profile Settings

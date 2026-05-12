@@ -1,7 +1,14 @@
 // src/controllers/channel.controller.js
 
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import * as channelService from '../services/channel.service.js';
 import { formatResponse } from '../utils/helpers.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsDir = path.join(__dirname, '../../data/uploads');
 
 export const createChannel = async (req, res, next) => {
   try {
@@ -145,13 +152,96 @@ export const removeAdmin = async (req, res, next) => {
 
 export const updateChannel = async (req, res, next) => {
   try {
-    const { name, username, description, avatar } = req.body;
+    const { name, username, description } = req.body;
     const channel = await channelService.updateChannel(
       req.params.channelId,
       req.userId,
-      { name, username, description, avatar }
+      { name, username, description }
     );
     res.json(formatResponse(true, channel, 'Channel updated'));
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteAvatarFile = (avatarUrl) => {
+  if (!avatarUrl || avatarUrl.startsWith('data:image')) return false;
+
+  const fileName = path.basename(avatarUrl);
+  const avatarPath = path.join(uploadsDir, 'avatars', fileName);
+  
+  if (fs.existsSync(avatarPath)) {
+    fs.unlinkSync(avatarPath);
+    return true;
+  }
+  return false;
+};
+
+export const uploadAvatar = async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json(
+        formatResponse(false, null, 'No file uploaded')
+      );
+    }
+
+    const channelId = req.params.channelId;
+    const userId = req.userId;
+
+    const channel = await channelService.getChannelById(channelId, userId);
+    
+    if (channel.ownerId !== userId) {
+      if (req.file && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+      return res.status(403).json(
+        formatResponse(false, null, 'Only the channel owner can change avatar')
+      );
+    }
+
+    if (channel.avatar) {
+      deleteAvatarFile(channel.avatar);
+    }
+
+    const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+    
+    const updatedChannel = await channelService.updateChannelAvatar(
+      channelId,
+      avatarUrl
+    );
+
+    res.json(formatResponse(true, updatedChannel, 'Avatar uploaded successfully'));
+  } catch (error) {
+    if (req.file && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    next(error);
+  }
+};
+
+export const deleteAvatar = async (req, res, next) => {
+  try {
+    const channelId = req.params.channelId;
+    const userId = req.userId;
+
+    const channel = await channelService.getChannelById(channelId, userId);
+    
+    if (channel.ownerId !== userId) {
+      return res.status(403).json(
+        formatResponse(false, null, 'Only the channel owner can remove avatar')
+      );
+    }
+
+    if (channel.avatar) {
+      deleteAvatarFile(channel.avatar);
+    }
+
+    const updatedChannel = await channelService.updateChannelAvatar(
+      channelId,
+      null
+    );
+
+    res.json(formatResponse(true, updatedChannel, 'Avatar removed successfully'));
   } catch (error) {
     next(error);
   }

@@ -5,6 +5,46 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.3.0] - 2026-05-12
+
+### Added - New Features
+
+#### Channel Avatar Management with Multer
+  - File upload with `multipart/form-data` 
+  - Store files in `data/uploads/avatars/`
+  - File type validation (JPEG, PNG, GIF, WebP only)
+  - File size limit (max 5MB)
+  - Auto-rename files with `userId` to prevent duplicates
+
+#### Avatar Management Endpoints
+- **`POST /api/channels/:channelId/avatar`** - Upload new avatar
+  - Automatically delete previous avatar from disk
+  - Only channel owner can upload
+- **`DELETE /api/channels/:channelId/avatar`** - Delete avatar
+  - Delete file from disk and database
+  - Only channel owner can delete
+
+#### Channel Update Improvement
+- **Separated text update from avatar update**
+  - `PUT /api/channels/:channelId` - edit only name, username, description
+  - Avatar removed from this endpoint (use separate endpoint)
+
+### Technical Improvements
+- **Helper function `deleteAvatarFile`** for safe file deletion from disk
+- **Correct file path handling** using `path.join` and `__dirname`
+- **Auto file cleanup on error** (cleanup in catch block)
+
+### Changed
+- Changed `updateChannel` in controller - removed `avatar` from body
+- Added `updateChannelAvatar` in service
+- Fixed static file path for uploaded files
+
+### Security
+- Permission check before any avatar operation
+- File type and size validation before storage
+
+---
+
 ## v1.2.0 — Security & Session Architecture Upgrade (2026-02-27)
 
 ### 🔐 Security System Overhaul

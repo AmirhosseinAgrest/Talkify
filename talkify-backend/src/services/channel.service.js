@@ -248,3 +248,11 @@ export const updateChannel = async (channelId, userId, updates) => {
 
   return updatedChannel;
 };
+
+export const updateChannelAvatar = async (channelId, avatarUrl) => {
+  const updatedChannel = await db.updateChannel(channelId, {
+    avatar: avatarUrl,
+    updatedAt: new Date().toISOString(),
+  });
+  return updatedChannel;
+};

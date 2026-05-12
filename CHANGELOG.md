@@ -6,6 +6,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2026-05-12
+
+### Added - Channel Editing Feature
+
+#### Frontend (v1.3.0)
+- Professional channel information editing (name, username, description)
+- Avatar upload with drag & drop and file selection
+- File type and size validation (images only, max 5MB)
+- Avatar preview before upload
+- Change and remove avatar functionality
+- Fixed state mixing bug in ChannelInfoDialog
+- Improved mobile user experience
+- Real-time store synchronization after edits
+
+#### Backend (v1.3.0)
+- Professional avatar upload system with Multer
+- `POST /api/channels/:channelId/avatar` - Upload new avatar
+- `DELETE /api/channels/:channelId/avatar` - Delete avatar
+- Automatic deletion of old avatar file from disk
+- File type validation (JPEG, PNG, GIF, WebP)
+- File size limit (max 5MB)
+- Separated text update from avatar update in `updateChannel`
+
+### Breaking Changes
+- `PUT /api/channels/:channelId` no longer accepts `avatar` field
+- Use `POST /api/channels/:channelId/avatar` for avatar upload instead
+
+---
+
 ## v1.2.0 — Security Upgrade Release (2026-02-27)
 
 ### 🔐 Major Security Enhancements
