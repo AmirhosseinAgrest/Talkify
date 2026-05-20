@@ -5,6 +5,26 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+# Changelog - Talkify Backend
+
+## [1.3.1] - 2026-05-20
+
+### Added - New Endpoints
+
+#### Get Channel by Username
+- **`GET /api/channels/username/:username`** - Get channel by username
+  - Returns channel with isMember, isAdmin, isOwner fields
+  - Proper role detection for the requesting user
+
+### Fixed - Bug Fixes
+
+#### Search Channels Enhancement
+- **Added user role fields to search results**
+  - Now returns isMember, isAdmin, isOwner for each channel
+  - Fixed role detection when accessing channels via search
+
+---
+
 ## [1.3.0] - 2026-05-12
 
 ### Added - New Features

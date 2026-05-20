@@ -84,6 +84,7 @@ export interface Channel {
   isMember?: boolean;
   isAdmin?: boolean;
   isOwner?: boolean;
+  unreadCount?: number;
   createdAt: string;
   updatedAt: string;
 }

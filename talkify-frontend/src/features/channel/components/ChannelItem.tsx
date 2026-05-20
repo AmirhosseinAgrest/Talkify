@@ -15,22 +15,27 @@ interface ChannelItemProps {
 
 export function ChannelItem({ channel }: ChannelItemProps) {
   const navigate = useNavigate();
-  const { channelId } = useParams();
+  const { username } = useParams();
   const setActiveChannel = useChannelStore((state) => state.setActiveChannel);
 
-  const isActive = channelId === channel.id;
+  const isActive = username === channel.username;
 
   const handleClick = () => {
+    if (isActive) return;
+    
     setActiveChannel(channel);
-    navigate(`/channel/${channel.id}`);
+    navigate(`/channel/${channel.username}`);
   };
 
   return (
     <button
       onClick={handleClick}
+      disabled={isActive}
       className={cn(
         'w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors',
-        isActive ? 'bg-primary/10 text-primary' : 'hover:bg-muted'
+        isActive 
+          ? 'bg-primary/10 text-primary cursor-default opacity-70' 
+          : 'hover:bg-muted cursor-pointer'
       )}
     >
       <Avatar>
@@ -42,7 +47,12 @@ export function ChannelItem({ channel }: ChannelItemProps) {
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1">
-          <p className="font-medium truncate">{channel.name}</p>
+          <p className={cn(
+            "font-medium truncate",
+            isActive && "text-primary"
+          )}>
+            {channel.name}
+          </p>
           {channel.isVerified && <VerifiedBadge/>}
         </div>
         <p className="text-sm text-muted-foreground truncate">
@@ -61,6 +71,12 @@ export function ChannelItem({ channel }: ChannelItemProps) {
           {channel.memberCount}
         </div>
       </div>
+
+      {channel.unreadCount && channel.unreadCount > 0 && !isActive && (
+        <span className="flex items-center justify-center h-5 min-w-5 px-1 bg-primary text-primary-foreground text-xs rounded-full">
+          {channel.unreadCount}
+        </span>
+      )}
     </button>
   );
 }

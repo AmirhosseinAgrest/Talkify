@@ -36,16 +36,13 @@ export const useSocketStore = create<SocketState>((set, get) => ({
 
   initSocket: (token: string) => {
     if (get().isConnected) {
-      console.log('⚠️ Socket already connected');
       return;
     }
 
     if (!token) {
-      console.log('⚠️ No token provided');
       return;
     }
 
-    console.log('🔌 Creating socket connection...');
     const socket = createSocket(token);
 
     socket.on('connect', () => {
@@ -57,12 +54,10 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     });
 
     socket.on('connect_error', (error) => {
-      console.log('❌ Socket connection error:', error.message);
       set({ isConnected: false });
     });
 
     socket.on('message:receive', (message: Message) => {
-      console.log('📨 Message received:', message);
 
       const chatStore = useChatStore.getState();
       const currentUser = useAuthStore.getState().user;
@@ -158,7 +153,6 @@ export const useSocketStore = create<SocketState>((set, get) => ({
   },
 
   disconnect: () => {
-    console.log('🔌 Disconnecting socket...');
     disconnectSocket();
     set({ isConnected: false, typingUsers: new Map() });
   },
@@ -167,7 +161,6 @@ export const useSocketStore = create<SocketState>((set, get) => ({
     const socket = getSocket();
     if (socket?.connected) {
       socket.emit('chat:join', chatId);
-      console.log('🚪 Joined chat:', chatId);
     }
   },
 

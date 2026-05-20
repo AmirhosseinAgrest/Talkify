@@ -63,7 +63,7 @@ export const channelService = {
   uploadAvatar: async (channelId: string, file: File): Promise<ApiResponse<Channel>> => {
     const formData = new FormData();
     formData.append('avatar', file);
-    
+
     const response = await api.post(`/channels/${channelId}/avatar`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -74,6 +74,11 @@ export const channelService = {
 
   deleteAvatar: async (channelId: string): Promise<ApiResponse<Channel>> => {
     const response = await api.delete(`/channels/${channelId}/avatar`);
+    return response.data;
+  },
+
+  getChannelByUsername: async (username: string): Promise<ApiResponse<Channel>> => {
+    const response = await api.get(`/channels/username/${username}`);
     return response.data;
   },
 };

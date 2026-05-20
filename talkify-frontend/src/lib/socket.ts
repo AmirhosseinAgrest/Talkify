@@ -12,8 +12,6 @@ export const createSocket = (token: string): Socket => {
     socket = null;
   }
 
-  console.log('🔌 Creating socket with token:', token ? 'Token exists' : 'No token!');
-
   socket = io(SOCKET_URL, {
     autoConnect: false,
     auth: {
@@ -31,14 +29,12 @@ export const getSocket = (): Socket | null => {
 
 export const connectSocket = (): void => {
   if (socket && !socket.connected) {
-    console.log('🔌 Connecting socket...');
     socket.connect();
   }
 };
 
 export const disconnectSocket = (): void => {
   if (socket) {
-    console.log('🔌 Disconnecting socket...');
     socket.disconnect();
     socket = null;
   }

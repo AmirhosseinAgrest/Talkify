@@ -1,14 +1,13 @@
 // src/features/chat/components/ChatHeader.tsx
 
 import { useState } from 'react';
-import { ArrowRight, MoreVertical, User, Flag, Ban, Trash } from 'lucide-react';
+import { ArrowRight, MoreVertical, User } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { VerifiedBadge } from '@/components/common/VerifiedBadge';
@@ -32,13 +31,18 @@ export function ChatHeader() {
 
   const avatarUrl = otherUser.avatar ? `${API_URL}${otherUser.avatar}` : undefined;
 
+  const handleOpenUserInfo = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setShowUserInfo(true);
+  };
+
   return (
     <>
-      <header className="h-16 px-4 flex items-center justify-between border-b bg-card">
-        <button
-          onClick={() => setShowUserInfo(true)}
-          className="flex items-center gap-3 hover:bg-muted/50 rounded-lg p-2 -m-2 transition-colors"
-        >
+      <header
+        className="h-16 px-4 flex items-center justify-between border-b bg-card cursor-pointer hover:bg-accent/5 transition-colors"
+        onClick={handleOpenUserInfo}
+      >
+        <div className="flex items-center gap-3">
           {isMobile && (
             <Button
               variant="ghost"
@@ -47,43 +51,55 @@ export function ChatHeader() {
                 e.stopPropagation();
                 setSidebarOpen(true);
               }}
+              className="shrink-0"
             >
               <ArrowRight className="h-5 w-5" />
             </Button>
           )}
 
-          <Avatar>
-            <AvatarImage src={avatarUrl} />
-            <AvatarFallback>
-              {otherUser.username?.charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <div className="flex items-center gap-3">
+            <Avatar 
+              className="cursor-pointer shrink-0"
+              onClick={handleOpenUserInfo}
+            >
+              <AvatarImage src={avatarUrl} />
+              <AvatarFallback className="bg-primary/10 text-primary">
+                {otherUser.username?.charAt(0).toUpperCase() || '?'}
+              </AvatarFallback>
+            </Avatar>
 
-          <div className="text-right">
-            <div className="flex items-center gap-1">
-              <p className="font-medium">{otherUser.username}</p>
-              {otherUser.isVerified && <VerifiedBadge />}
+            <div onClick={handleOpenUserInfo} className="cursor-pointer min-w-0">
+              <div className="flex items-center gap-1 flex-wrap">
+                <p className="font-medium truncate">{otherUser.username}</p>
+                {otherUser.isVerified && <VerifiedBadge size="1rem" />}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {otherUser.isOnline ? (
+                  <span className="text-green-500">Online</span>
+                ) : (
+                  'Offline'
+                )}
+              </p>
             </div>
-            <p className="text-xs text-muted-foreground">
-              {otherUser.isOnline ? (
-                <span className="text-green-500">Online</span>
-              ) : (
-                'Offline'
-              )}
-            </p>
           </div>
-        </button>
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={(e) => e.stopPropagation()}
+              className="shrink-0"
+            >
               <MoreVertical className="h-5 w-5" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onClick={() => setShowUserInfo(true)}>
+
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuItem onClick={handleOpenUserInfo}>
               <User className="h-4 w-4 mr-2" />
-              View Profile
+              <span>View Profile</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

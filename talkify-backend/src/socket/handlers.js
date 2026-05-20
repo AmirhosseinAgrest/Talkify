@@ -9,7 +9,6 @@ const onlineUsers = new Map();
 
 export const handleConnection = (io, socket) => {
   const userId = socket.userId;
-  console.log(`✅ User connected: ${userId}`);
 
   onlineUsers.set(userId, socket.id);
   db.updateUser(userId, { isOnline: true, lastSeen: new Date().toISOString() });
@@ -17,7 +16,6 @@ export const handleConnection = (io, socket) => {
 
   socket.on('chat:join', (chatId) => {
     socket.join(chatId);
-    console.log(`🚪 User ${userId} joined chat: ${chatId}`);
   });
 
   socket.on('chat:leave', (chatId) => {
@@ -115,7 +113,6 @@ export const handleConnection = (io, socket) => {
   });
 
   socket.on('disconnect', async () => {
-    console.log(`❌ User disconnected: ${userId}`);
     onlineUsers.delete(userId);
     await db.updateUser(userId, {
       isOnline: false,

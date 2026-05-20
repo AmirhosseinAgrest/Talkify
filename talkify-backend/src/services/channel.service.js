@@ -51,6 +51,20 @@ export const getChannelById = async (channelId, userId) => {
   };
 };
 
+export const getChannelByUsername = async (username, userId) => {
+  const channel = await db.getChannelByUsername(username.toLowerCase());
+  if (!channel) {
+    throw formatError('Channel not found', 404);
+  }
+
+  return {
+    ...channel,
+    isMember: channel.memberIds.includes(userId),
+    isAdmin: channel.adminIds.includes(userId),
+    isOwner: channel.ownerId === userId,
+  };
+};
+
 export const getUserChannels = async (userId) => {
   const channels = await db.getChannelsByUserId(userId);
 

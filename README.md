@@ -114,20 +114,5 @@ export const deleteMessageById = async (messageId, userId) => {
 };
 ```
 ---
-## 🧭 Roadmap
-- ✅ Real‑time messaging
-
-- ✅ Channels
-
-- ✅ Admin panel
-
-- ✅ Broadcast system
-
-- ⏳ Voice messages
-
-- ⏳ Group chats
-
-- ⏳ Push notifications
----
 ## 👤 Author
  **Amirhossein Agrest** Creator & Lead Developer Open‑source advocate and system architect

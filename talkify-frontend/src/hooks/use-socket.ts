@@ -17,20 +17,18 @@ export function useSocket() {
     connectSocket();
     const socket = getSocket();
 
-    socket.on('message:receive', (message: Message) => {
+    socket?.on('message:receive', (message: Message) => {
       addMessage(message);
     });
 
-    socket.on('message:status', ({ messageId, status }) => {
+    socket?.on('message:status', ({ messageId, status }) => {
       updateMessageStatus(messageId, status);
     });
 
-    socket.on('user:online', (userId: string) => {
-      console.log('User online:', userId);
+    socket?.on('user:online', () => {
     });
 
-    socket.on('user:offline', (userId: string) => {
-      console.log('User offline:', userId);
+    socket?.on('user:offline', () => {
     });
 
     return () => {
@@ -39,18 +37,15 @@ export function useSocket() {
   }, [isAuthenticated, addMessage, updateMessageStatus]);
 
   const sendMessage = useCallback((chatId: string, content: string) => {
-    const socket = getSocket();
-    socket.emit('message:send', { chatId, content });
+    getSocket()?.emit('message:send', { chatId, content });
   }, []);
 
   const sendTyping = useCallback((chatId: string) => {
-    const socket = getSocket();
-    socket.emit('typing:start', { chatId });
+    getSocket()?.emit('typing:start', { chatId });
   }, []);
 
   const stopTyping = useCallback((chatId: string) => {
-    const socket = getSocket();
-    socket.emit('typing:stop', { chatId });
+    getSocket()?.emit('typing:stop', { chatId });
   }, []);
 
   return { sendMessage, sendTyping, stopTyping };

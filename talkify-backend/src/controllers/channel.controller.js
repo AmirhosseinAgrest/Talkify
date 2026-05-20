@@ -42,6 +42,19 @@ export const getMyChannels = async (req, res, next) => {
   }
 };
 
+export const getChannelByUsername = async (req, res, next) => {
+  try {
+    const { username } = req.params;
+    const channel = await channelService.getChannelByUsername(
+      username,
+      req.userId
+    );
+    res.json(formatResponse(true, channel));
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getChannel = async (req, res, next) => {
   try {
     const channel = await channelService.getChannelById(

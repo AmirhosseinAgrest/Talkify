@@ -1,9 +1,8 @@
 // src/components/layout/Sidebar.tsx
 
 import { useState } from 'react';
-import { Search, LogOut, MessageSquare, Radio } from 'lucide-react';
+import { Search, MessageSquare, Radio } from 'lucide-react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -80,7 +79,7 @@ export function Sidebar() {
         <div className="p-4 border-t">
           <button
             onClick={() => setProfileOpen(true)}
-            className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors text-right"
+            className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors text-left"
           >
             <Avatar>
               <AvatarImage src={avatarUrl} />

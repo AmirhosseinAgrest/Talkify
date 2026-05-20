@@ -38,12 +38,10 @@ function SocketManager() {
   useEffect(() => {
     if (isAuthenticated && token) {
       if (!isConnected) {
-        console.log('🔌 User is authenticated, connecting socket...');
         initSocket(token);
       }
     } else {
       if (isConnected) {
-        console.log('🔌 User logged out, disconnecting socket...');
         disconnect();
       }
     }
@@ -96,7 +94,7 @@ function AppContent() {
         <Route element={<MainLayout />}>
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/chat/:username" element={<ChatPage />} />
-          <Route path="/channel/:channelId" element={<ChannelPage />} />
+          <Route path="/channel/:username" element={<ChannelPage />} />
         </Route>
 
         <Route path="/admin" element={<AdminPage />} />

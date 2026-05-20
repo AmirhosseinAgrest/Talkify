@@ -50,8 +50,6 @@ export const login = async (req, res, next) => {
       userAgent,
     });
 
-    console.log('✅ Login successful for:', email);
-
     return res.json(formatResponse(true, result, 'Login successful'));
   } catch (error) {
     next(error);

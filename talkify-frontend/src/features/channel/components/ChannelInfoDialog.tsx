@@ -37,7 +37,7 @@ export function ChannelInfoDialog({
   const [description, setDescription] = useState(channel.description || '');
   const [avatar, setAvatar] = useState<string | null>(channel.avatar || null);
   const [isSaving, setIsSaving] = useState(false);
-  
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -46,9 +46,9 @@ export function ChannelInfoDialog({
       setUsername(channel.username);
       setDescription(channel.description || '');
       setAvatar(channel.avatar || null);
-      setIsEditing(false); 
+      setIsEditing(false);
     }
-  }, [channel, open]); 
+  }, [channel, open]);
 
   useEffect(() => {
     if (!isEditing) {
@@ -78,7 +78,7 @@ export function ChannelInfoDialog({
 
       toast.success('Channel updated successfully');
       setIsEditing(false);
-      
+
       const fullChannel = await channelService.getChannel(channel.id);
       onChannelUpdated?.(fullChannel.data);
     } catch (error: any) {
@@ -94,7 +94,7 @@ export function ChannelInfoDialog({
       await channelService.deleteAvatar(channel.id);
       setAvatar(null);
       toast.success('Avatar removed successfully');
-      
+
       if (onChannelUpdated) {
         const fullChannel = await channelService.getChannel(channel.id);
         onChannelUpdated(fullChannel.data);
@@ -125,7 +125,7 @@ export function ChannelInfoDialog({
       const response = await channelService.uploadAvatar(channel.id, file);
       setAvatar(response.data.avatar ?? null);
       toast.success('Avatar uploaded successfully');
-      
+
       if (onChannelUpdated) {
         const fullChannel = await channelService.getChannel(channel.id);
         onChannelUpdated(fullChannel.data);
@@ -142,128 +142,133 @@ export function ChannelInfoDialog({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full sm:max-w-md p-0">
-        <ScrollArea className="h-full">
+        <div className="flex items-center justify-end px-4 py-3 sticky top-0 bg-background z-10">
+          <div className="flex items-center gap-2">
+            {canEdit && !isEditing && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsEditing(true)}
+                className="h-8 w-8"
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
+            )}
+            {canEdit && isEditing && (
+              <>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleCancelEdit}
+                  disabled={isSaving}
+                  className="h-8 w-8"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="h-8 w-8 text-green-600"
+                >
+                  <Check className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onOpenChange(false)}
+              className="h-8 w-8"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <ScrollArea className="h-[calc(100%-3.5rem)]">
           <div className="p-6 pb-3">
-            <div className="flex items-start justify-between">
-              <div className="flex-1">
-                <div className="flex flex-col items-center">
-                  <Avatar className="h-24 w-24 mx-auto mb-4">
-                    <AvatarImage src={avatar || undefined} />
-                    <AvatarFallback className="text-2xl bg-primary/10 text-primary">
-                      {name?.charAt(0).toUpperCase() || '?'}
-                    </AvatarFallback>
-                  </Avatar>
+            <div className="flex flex-col items-center">
+              <Avatar className="h-24 w-24 mx-auto mb-4">
+                <AvatarImage src={avatar || undefined} />
+                <AvatarFallback className="text-2xl bg-primary/10 text-primary">
+                  {name?.charAt(0).toUpperCase() || '?'}
+                </AvatarFallback>
+              </Avatar>
 
-                  <input
-                    type="file"
-                    accept="image/*"
-                    ref={fileInputRef}
-                    className="hidden"
-                    onChange={handleAvatarUpload}
-                  />
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                className="hidden"
+                onChange={handleAvatarUpload}
+              />
 
-                  {isEditing && canEdit && (
-                    <div className="mt-3 flex items-center justify-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => fileInputRef.current?.click()}
-                      >
-                        {avatar ? 'Change avatar' : 'Add avatar'}
-                      </Button>
+              {isEditing && canEdit && (
+                <div className="mt-3 flex items-center justify-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    {avatar ? 'Change avatar' : 'Add avatar'}
+                  </Button>
 
-                      {avatar && (
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={handleAvatarRemove}
-                        >
-                          Remove
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  {isEditing && canEdit ? (
-                    <Input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      className="max-w-xs text-center"
-                      placeholder="Channel name"
-                    />
-                  ) : (
-                    <h2 className="text-xl font-bold">{channel.name}</h2>
-                  )}
-                  {channel.isVerified && <VerifiedBadge size="1.2rem" />}
-                </div>
-
-                <div className="text-center">
-                  {isEditing && canEdit ? (
-                    <Input
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      className="max-w-xs mx-auto text-center"
-                      placeholder="username"
-                    />
-                  ) : (
-                    <p className="text-muted-foreground">@{channel.username}</p>
-                  )}
-                </div>
-
-                <div className="mt-4">
-                  {isEditing && canEdit ? (
-                    <Textarea
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      className="min-h-[100px]"
-                      placeholder="Channel description (optional)"
-                    />
-                  ) : (
-                    channel.description && (
-                      <p className="text-sm text-muted-foreground">
-                        {channel.description}
-                      </p>
-                    )
-                  )}
-                </div>
-              </div>
-
-              {canEdit && (
-                <div className="ml-2">
-                  {isEditing ? (
-                    <div className="flex flex-col gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={handleCancelEdit}
-                        disabled={isSaving}
-                        title="Cancel"
-                      >
-                        <X className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={handleSave}
-                        disabled={isSaving}
-                        title="Save"
-                      >
-                        <Check className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ) : (
+                  {avatar && (
                     <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => setIsEditing(true)}
-                      title="Edit channel"
+                      variant="destructive"
+                      size="sm"
+                      onClick={handleAvatarRemove}
                     >
-                      <Edit2 className="h-4 w-4" />
+                      Remove
                     </Button>
                   )}
                 </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-center gap-2 mb-1 mt-4">
+              {isEditing && canEdit ? (
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="max-w-xs text-center"
+                  placeholder="Channel name"
+                />
+              ) : (
+                <h2 className="text-xl font-bold">{channel.name}</h2>
+              )}
+              {channel.isVerified && <VerifiedBadge size="1.2rem" />}
+            </div>
+
+            <div className="text-center">
+              {isEditing && canEdit ? (
+                <Input
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="max-w-xs mx-auto text-center"
+                  placeholder="username"
+                />
+              ) : (
+                <p className="text-muted-foreground">@{channel.username}</p>
+              )}
+            </div>
+
+            <div className="mt-4">
+              {isEditing && canEdit ? (
+                <Textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  className="min-h-[100px]"
+                  placeholder="Channel description (optional)"
+                />
+              ) : (
+                channel.description && (
+                  <p className="text-sm text-muted-foreground">
+                    {channel.description}
+                  </p>
+                )
               )}
             </div>
           </div>
@@ -296,8 +301,8 @@ export function ChannelInfoDialog({
                   {channel.isOwner
                     ? 'Owner'
                     : channel.isAdmin
-                    ? 'Admin'
-                    : 'Member'}
+                      ? 'Admin'
+                      : 'Member'}
                 </span>
               </div>
             </div>

@@ -12,6 +12,7 @@ router.get('/my', channelController.getMyChannels);
 router.post('/', channelController.createChannel);
 router.get('/:channelId', channelController.getChannel);
 router.put('/:channelId', channelController.updateChannel);
+router.get('/username/:username', channelController.getChannelByUsername);
 
 router.post('/:channelId/avatar', uploadAvatar.single('avatar'), channelController.uploadAvatar);
 

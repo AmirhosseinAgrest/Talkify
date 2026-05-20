@@ -6,6 +6,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.1] - 2026-05-20
+
+### Fixed - Bug Fixes
+
+#### Frontend (v1.3.1)
+- **Channel route changed from ID to username**
+  - Route: `/channel/:channelId` → `/channel/:username`
+- **Fixed user role detection in channels**
+  - `isOwner`, `isAdmin` now work correctly
+- **Disabled click on active chat item**
+  - Clicking currently active chat does nothing
+- **Fixed avatar display in chat list**
+  - Avatar URLs now constructed correctly
+- **Fixed message text direction**
+  - Auto-detect RTL (Arabic) and LTR (English)
+- **Removed unnecessary console logs**
+- **Fixed TypeScript errors** (socket null, unreadCount)
+
+#### Backend (v1.3.1)
+- **Added `GET /api/channels/username/:username` endpoint**
+  - Get channel by username with role fields
+- **Fixed search results missing role fields**
+  - Now returns `isMember`, `isAdmin`, `isOwner`
+
+### Changed - Improvements
+
+#### Frontend (v1.3.1)
+- **Unified ChatHeader style with ChannelHeader**
+  - Entire header clickable to open user info
+- **Moved edit button next to close button** in ChannelInfoDialog
+
+---
+
 ## [1.3.0] - 2026-05-12
 
 ### Added - Channel Editing Feature

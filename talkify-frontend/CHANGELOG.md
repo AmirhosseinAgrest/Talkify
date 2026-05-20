@@ -5,6 +5,45 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.3.1] - 2026-05-20
+
+### Fixed - Bug Fixes
+
+#### Channel Routing
+- **Changed channel route from ID to username**
+  - Route changed from `/channel/:channelId` to `/channel/:username`
+  - Added `getChannelByUsername` API call
+  - Fixed channel item click navigation
+
+#### User Role Detection in Channels
+- **Fixed isOwner and isAdmin detection**
+  - Added missing role fields to channel data
+
+#### Chat Improvements
+- **Fixed click on active chat item**
+  - Disabled clicking on currently active chat
+  - Added visual feedback for active chat (opacity, different style)
+- **Fixed avatar display in chat list**
+  - Corrected avatar URL construction with API_URL
+- **Fixed message text direction**
+  - Auto-detect RTL (Arabic) and LTR (English) languages
+  - Proper text alignment based on language
+
+#### UI Improvements
+- **Unified ChatHeader style with ChannelHeader**
+  - Made entire header clickable to open user info
+  - Moved edit button next to close button in ChannelInfoDialog
+  - Removed unnecessary border line from dialog header
+
+#### Code Quality
+- **Removed unnecessary console logs**
+  - Cleaned up socket-related console.log statements
+- **Fixed TypeScript errors**
+  - Fixed `socket` possibly null error
+  - Added `unreadCount` to Channel type
+
+---
+
 ## [1.3.0] - 2026-05-12
 
 ### Added - New Features

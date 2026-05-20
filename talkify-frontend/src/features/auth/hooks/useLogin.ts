@@ -15,7 +15,6 @@ export function useLogin() {
     mutationFn: (data: LoginRequest) => authService.login(data),
 
     onSuccess: (response) => {
-      console.log('✅ Login API response:', response);
 
       const { user, token } = response.data;
 
