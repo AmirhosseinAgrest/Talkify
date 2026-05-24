@@ -32,8 +32,7 @@ export function NewChatDialog() {
       onSuccess: () => {
         setOpen(false);
         setSearchQuery('');
-
-        navigate(`/chat/${user.username}`);
+        navigate(`/${user.username}`);
       },
     });
   };

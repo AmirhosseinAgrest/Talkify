@@ -44,7 +44,7 @@ export function ChatItem({ chat }: ChatItemProps) {
     if (isActive) return;
 
     setActiveChat(chat);
-    navigate(`/chat/${otherUser?.username}`);
+    navigate(`/${otherUser?.username}`);
   };
 
   const getAvatarUrl = (avatar: string | null | undefined) => {

@@ -54,9 +54,16 @@ export const updateProfile = async (req, res, next) => {
 
     if (username && username !== user.username) {
       const existingUser = await db.getUserByUsername(username);
-      if (existingUser) {
+      if (existingUser && existingUser.id !== userId) {
         return res.status(400).json(
           formatResponse(false, null, 'This username is already taken')
+        );
+      }
+      
+      const existingChannel = await db.getChannelByUsername(username);
+      if (existingChannel) {
+        return res.status(400).json(
+          formatResponse(false, null, 'This username is already taken by a channel')
         );
       }
     }

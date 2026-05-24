@@ -5,6 +5,24 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+# Changelog - Backend
+
+## [1.4.0] - 2026-05-25
+
+### Added
+- Simultaneous username checking in users and channels during registration
+- Simultaneous checking when creating a new channel
+
+### Changed
+- Optimized case-insensitive search in `db.service.js`
+- Improved error messages for duplicate usernames
+
+### Fixed
+- Fixed registration with username that exists in channels
+- Fixed channel creation with username that exists in users
+
+---
+
 # Changelog - Talkify Backend
 
 ## [1.3.1] - 2026-05-20

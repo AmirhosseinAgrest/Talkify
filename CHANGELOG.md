@@ -6,6 +6,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.4.0] - 2026-05-25
+
+### 🚀 Features
+
+#### Routing Improvements
+- **Removed automatic redirect** from `/` to `/chat`
+- **Unified routing:** Both users and channels now use the `/:username` pattern
+- **Legacy link support:** Automatic redirect from `/chat/:username` and `/channel/:username` to `/:username`
+
+#### Mention Links
+- Automatic conversion of `@username` to clickable links in messages
+- Support for mentions in both private chats and channels
+
+#### Username Validation
+- Simultaneous username checking in **users** and **channels** during registration
+- Simultaneous checking when creating a new channel
+- Case-insensitive username support
+
+### 🐛 Bug Fixes
+
+- Fixed incorrect header display when clicking on mentions
+- Fixed messages not loading after clicking on mention links
+- Fixed 401 error in user/channel type detection
+- Fixed redirect issue after creating a new channel
+
+### 🔧 Changed
+
+- Changed default redirect after login from `/chat` to `/`
+- Optimized `UsernameRouter` for simultaneous user and channel detection
+- Improved mention styling with transition effects
+
+### ⚠️ Breaking Changes
+
+- Legacy routes `/chat/:username` and `/channel/:username` are deprecated
+- Automatic redirect to new route `/:username`
+
+---
+
 ## [1.3.1] - 2026-05-20
 
 ### Fixed - Bug Fixes

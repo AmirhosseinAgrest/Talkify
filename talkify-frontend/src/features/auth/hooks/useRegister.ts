@@ -22,7 +22,7 @@ export function useRegister() {
     onSuccess: (response) => {
       login(response.data.user, response.data.token);
       toast.success('Signup successful! 🎉');
-      navigate('/chat');
+      navigate('/');
     },
 
     onError: (error: any) => {

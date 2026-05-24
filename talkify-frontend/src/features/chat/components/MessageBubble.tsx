@@ -1,7 +1,7 @@
 // src/features/chat/components/MessageBubble.tsx
 
 import { useState } from 'react';
-import { Check, CheckCheck, Clock, Play, Download, FileIcon, Pencil, Eye, Loader2 } from 'lucide-react';
+import { Check, CheckCheck, Clock, Play, Download, FileIcon, Pencil, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -14,6 +14,7 @@ import { MessageContextMenu } from '@/components/common/MessageContextMenu';
 import { MediaViewer } from '@/components/common/MediaViewer';
 import { formatTime } from '@/lib/utils';
 import { SystemMessageBubble } from './SystemMessageBubble';
+import { MentionText } from '@/components/common/MentionText';
 import { cn } from '@/lib/utils';
 import type { Message } from '@/types';
 
@@ -312,7 +313,11 @@ export function MessageBubble({
         return (
           <>
             {renderImage()}
-            {message.content && <p className="mt-2 break-words">{message.content}</p>}
+            {message.content && (
+              <p className="mt-2 break-words">
+                <MentionText text={message.content} />
+              </p>
+            )}
           </>
         );
 
@@ -320,7 +325,11 @@ export function MessageBubble({
         return (
           <>
             {renderVideo()}
-            {message.content && <p className="mt-2 break-words">{message.content}</p>}
+            {message.content && (
+              <p className="mt-2 break-words">
+                <MentionText text={message.content} />
+              </p>
+            )}
           </>
         );
 
@@ -328,7 +337,11 @@ export function MessageBubble({
         return (
           <>
             {renderAudio()}
-            {message.content && <p className="mt-2 break-words">{message.content}</p>}
+            {message.content && (
+              <p className="mt-2 break-words">
+                <MentionText text={message.content} />
+              </p>
+            )}
           </>
         );
 
@@ -336,12 +349,20 @@ export function MessageBubble({
         return (
           <>
             {renderFile()}
-            {message.content && <p className="mt-2 break-words">{message.content}</p>}
+            {message.content && (
+              <p className="mt-2 break-words">
+                <MentionText text={message.content} />
+              </p>
+            )}
           </>
         );
 
       default:
-        return <p className="break-words whitespace-pre-wrap">{message.content}</p>;
+        return (
+          <p className="break-words whitespace-pre-wrap">
+            <MentionText text={message.content || ''} />
+          </p>
+        );
     }
   };
 

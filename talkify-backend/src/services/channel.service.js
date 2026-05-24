@@ -6,13 +6,18 @@ import { formatError } from '../utils/helpers.js';
 import { CHANNEL_ROLES, MESSAGE_STATUS, MESSAGE_TYPE } from '../utils/constants.js';
 
 export const createChannel = async (ownerId, { name, username, description, avatar }) => {
-  const existingChannel = await db.getChannelByUsername(username);
-  if (existingChannel) {
-    throw formatError('This username is already taken', 400);
-  }
-
   if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
     throw formatError('Username must be 3–30 characters and contain only letters, numbers, and underscores', 400);
+  }
+
+  const existingChannel = await db.getChannelByUsername(username);
+  if (existingChannel) {
+    throw formatError('This username is already taken by another channel', 400);
+  }
+
+  const existingUser = await db.getUserByUsername(username);
+  if (existingUser) {
+    throw formatError('This username is already taken by a user', 400);
   }
 
   const newChannel = {
@@ -249,9 +254,14 @@ export const updateChannel = async (channelId, userId, updates) => {
   }
 
   if (updates.username && updates.username !== channel.username) {
-    const existing = await db.getChannelByUsername(updates.username);
-    if (existing) {
-      throw formatError('This username is already taken', 400);
+    const existingChannel = await db.getChannelByUsername(updates.username);
+    if (existingChannel && existingChannel.id !== channelId) {
+      throw formatError('This username is already taken by another channel', 400);
+    }
+    
+    const existingUser = await db.getUserByUsername(updates.username);
+    if (existingUser) {
+      throw formatError('This username is already taken by a user', 400);
     }
   }
 

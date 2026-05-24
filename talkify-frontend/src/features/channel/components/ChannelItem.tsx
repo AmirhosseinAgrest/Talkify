@@ -24,7 +24,7 @@ export function ChannelItem({ channel }: ChannelItemProps) {
     if (isActive) return;
     
     setActiveChannel(channel);
-    navigate(`/channel/${channel.username}`);
+    navigate(`/${channel.username}`);
   };
 
   return (

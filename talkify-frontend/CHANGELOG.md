@@ -5,6 +5,26 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+# Changelog - Frontend
+
+## [1.4.0] - 2026-05-25
+
+### Added
+- `UsernameRouter` component for automatic user/channel detection
+- `MentionText` component for converting `@username` to links
+- Mention support in messages
+
+### Changed
+- Routing changed from `/chat` and `/channel` to `/:username`
+- Redirect after login changed from `/chat` to `/`
+- Optimized mention styling
+
+### Fixed
+- Fixed incorrect header after clicking mentions
+- Fixed messages loading issue
+
+---
+
 ## [1.3.1] - 2026-05-20
 
 ### Fixed - Bug Fixes

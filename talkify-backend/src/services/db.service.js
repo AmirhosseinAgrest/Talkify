@@ -43,7 +43,7 @@ export const getUserByEmail = async (email) => {
 
 export const getUserByUsername = async (username) => {
   const users = await getUsers();
-  return users.find((user) => user.username === username) || null;
+  return users.find((user) => user.username.toLowerCase() === username.toLowerCase()) || null;
 };
 
 export const createUser = async (userData) => {
@@ -155,7 +155,7 @@ export const getChannelById = async (id) => {
 
 export const getChannelByUsername = async (username) => {
   const channels = await getChannels();
-  return channels.find((channel) => channel.username === username) || null;
+  return channels.find((channel) => channel.username.toLowerCase() === username.toLowerCase()) || null;
 };
 
 export const getChannelsByUserId = async (userId) => {

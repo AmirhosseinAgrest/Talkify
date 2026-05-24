@@ -16,7 +16,7 @@ export function useJoinChannel() {
     onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ['channels'] });
       setActiveChannel(response.data);
-      navigate(`/channel/${response.data.id}`);
+      navigate(`/${response.data.username}`);
       toast.success('You joined the channel! 🎉');
     },
     onError: (error: any) => {

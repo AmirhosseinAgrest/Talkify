@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { VerifiedBadge } from '@/components/common/VerifiedBadge';
+import { MentionText } from '@/components/common/MentionText';
 import { formatTime } from '@/lib/utils';
-import { cn } from '@/lib/utils';
 import type { Message, User } from '@/types';
 import { api } from '@/lib/api';
 
@@ -49,7 +49,9 @@ export function ChannelMessageBubble({ message }: ChannelMessageBubbleProps) {
         </div>
 
         <div className="bg-muted rounded-lg rounded-tl-none px-4 py-2">
-          <p className="break-words whitespace-pre-wrap">{message.content}</p>
+          <p className="break-words whitespace-pre-wrap">
+            <MentionText text={message.content || ''} />
+          </p>
         </div>
       </div>
     </div>

@@ -15,9 +15,9 @@ import { MainLayout } from '@/components/layout/MainLayout';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
 import ChatPage from '@/pages/chat/ChatPage';
-import ChannelPage from '@/pages/channel/ChannelPage';
 import AdminPage from '@/pages/admin/AdminPage';
 import NotFoundPage from '@/pages/error/NotFoundPage';
+import { UsernameRouter } from '@/components/common/UsernameRouter';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -46,10 +46,6 @@ function SocketManager() {
       }
     }
   }, [isAuthenticated, token, isConnected, initSocket, disconnect]);
-
-  if (!isAuthenticated || !token) {
-    return null;
-  }
 
   return null;
 }
@@ -84,21 +80,25 @@ function AppContent() {
       <SocketManager />
 
       <Routes>
-        <Route path="/" element={<Navigate to="/chat" replace />} />
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<ChatPage />} />
+          <Route path="/:username" element={<UsernameRouter />} />
+        </Route>
+
+        <Route path="/chat" element={<Navigate to="/" replace />} />
+        <Route path="/chat/:username" element={<Navigate to="/:username" replace />} />
+        <Route path="/channel/:username" element={<Navigate to="/:username" replace />} />
+
 
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
         </Route>
 
-        <Route element={<MainLayout />}>
-          <Route path="/chat" element={<ChatPage />} />
-          <Route path="/chat/:username" element={<ChatPage />} />
-          <Route path="/channel/:username" element={<ChannelPage />} />
-        </Route>
-
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="*" element={<NotFoundPage />} />
+
+        <Route path="/404" element={<NotFoundPage />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
       </Routes>
     </>
   );

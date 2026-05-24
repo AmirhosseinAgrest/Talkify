@@ -28,7 +28,7 @@ export function useLogin() {
       toast.success('Welcome! 👋');
 
       setTimeout(() => {
-        navigate('/chat');
+        navigate('/');
       }, 100);
     },
 

@@ -24,6 +24,14 @@ import { chatService } from '@/services/chat.service';
 
 export default function ChatPage() {
   const { username } = useParams<{ username: string }>();
+  if (!username) {
+    return (
+      <EmptyState
+        title="No user selected"
+        description="Select a user from the list"
+      />
+    );
+  }
   const [chatId, setChatId] = useState<string | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
 
@@ -48,9 +56,12 @@ export default function ChatPage() {
       try {
         const chatRes = await chatService.findOrCreateChat(username);
         setChatId(chatRes.data.id);
-      } catch (error) {
-        console.error('Error finding chat:', error);
-        toast.error('Failed to load chat');
+        useChatStore.getState().setActiveChat(chatRes.data);
+      } catch (error: any) {
+        if (error?.response?.status !== 404) {
+          console.error('Error finding chat:', error);
+          toast.error('Failed to load chat');
+        }
       } finally {
         setIsLoadingUser(false);
       }
@@ -76,6 +87,10 @@ export default function ChatPage() {
       checkStatus(otherUser.id);
     }
   }, [activeChat, currentUser?.id]);
+
+  useEffect(() => {
+    useChatStore.getState().setMessages([]);
+  }, [username]);
 
   const checkStatus = async (userId: string) => {
     setIsCheckingStatus(true);

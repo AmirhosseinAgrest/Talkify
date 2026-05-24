@@ -69,9 +69,18 @@ export const register = async ({ username, email, password }) => {
     throw formatError('This email is already registered', 400);
   }
 
-  const existingUsername = await db.getUserByUsername(username);
-  if (existingUsername) {
-    throw formatError('This username is already taken', 400);
+  if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
+    throw formatError('Username must be 3–30 characters and contain only letters, numbers, and underscores', 400);
+  }
+
+  const existingUser = await db.getUserByUsername(username);
+  if (existingUser) {
+    throw formatError('This username is already taken by a user', 400);
+  }
+
+  const existingChannel = await db.getChannelByUsername(username);
+  if (existingChannel) {
+    throw formatError('This username is already taken by a channel', 400);
   }
 
   const hashedPassword = await bcrypt.hash(password, 12);
@@ -79,7 +88,7 @@ export const register = async ({ username, email, password }) => {
 
   const newUser = {
     id: uuidv4(),
-    username,
+    username: username.toLowerCase(),
     email,
     password: hashedPassword,
     avatar: null,
