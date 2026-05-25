@@ -5,7 +5,25 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
-# Changelog - Frontend
+## [1.5.0] - 2026-05-25
+
+### 🚀 New Features
+
+#### File Upload in Channels
+- Complete file upload support in channels
+- File selection with preview before sending
+- Image preview
+
+#### Enhanced ChannelMessageBubble
+- Complete media rendering similar to private chats
+- MediaViewer integration for full-screen media viewing
+
+### 🐛 Bug Fixes
+
+- Fixed missing file content display in channel messages
+- Fixed media preview not showing in channels
+
+---
 
 ## [1.4.0] - 2026-05-25
 

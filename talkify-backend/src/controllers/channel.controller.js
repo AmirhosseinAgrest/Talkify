@@ -125,6 +125,46 @@ export const sendMessage = async (req, res, next) => {
   }
 };
 
+export const sendMessageWithFile = async (req, res, next) => {
+  try {
+    const { content, replyToId } = req.body;
+    const file = req.file;
+    const channelId = req.params.channelId;
+
+    let fileData = null;
+    if (file) {
+      const { getMessageType } = await import('../middleware/upload.middleware.js');
+      const type = getMessageType(file.mimetype);
+      fileData = {
+        type,
+        url: `/uploads/${type}s/${file.filename}`,
+        name: file.originalname,
+        size: file.size,
+      };
+    }
+
+    const message = await channelService.sendChannelMessageWithFile(
+      channelId,
+      req.userId,
+      content,
+      fileData,
+      replyToId
+    );
+
+    const io = req.app.get('io');
+    if (io) {
+      io.to(channelId).emit('channel:message:receive', message);
+    }
+
+    res.status(201).json(formatResponse(true, message));
+  } catch (error) {
+    if (req.file && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    next(error);
+  }
+};
+
 export const searchChannels = async (req, res, next) => {
   try {
     const { q } = req.query;

@@ -6,6 +6,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.0] - 2026-05-25
+
+### New Features
+
+#### File Upload in Channels
+
+#### Enhanced ChannelMessageBubble
+- Complete media rendering similar to private chats
+- Image preview with click-to-expand
+- Video player with play button overlay
+- Audio player with playback controls
+- File download button with progress indicator
+
+### Bug Fixes
+
+- Fixed missing file content display in channel messages
+- Fixed media preview not showing in channels
+- Fixed download functionality for channel files
+
+### Changed
+
+- Improved message bubble UI consistency across chats and channels
+- Optimized file loading performance
+
+---
+
 ## [1.4.0] - 2026-05-25
 
 ### 🚀 Features

@@ -5,7 +5,22 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
-# Changelog - Backend
+## [1.5.0] - 2026-05-25
+
+### 🚀 New Features
+
+#### File Upload in Channels
+- Added `sendChannelMessageWithFile` service function for handling file messages in channels
+- Added `sendMessageWithFile` controller endpoint for file uploads
+- Added `/messages/upload` route for channel file uploads
+- Integrated with existing upload middleware for file validation
+
+### 🔧 Technical Details
+
+- **Storage**: Files stored in `/data/uploads/{type}s/` directory
+- **Database**: Message records include `fileUrl`, `fileName`, `fileSize`, `type` fields
+
+---
 
 ## [1.4.0] - 2026-05-25
 

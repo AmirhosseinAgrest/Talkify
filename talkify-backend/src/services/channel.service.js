@@ -215,6 +215,57 @@ export const sendChannelMessage = async (channelId, senderId, content, type = ME
   return newMessage;
 };
 
+export const sendChannelMessageWithFile = async (channelId, senderId, content, file, replyToId = null) => {
+  const channel = await db.getChannelById(channelId);
+  if (!channel) {
+    throw formatError('Channel not found', 404);
+  }
+
+  if (!channel.adminIds.includes(senderId)) {
+    throw formatError('Only admins can send messages in this channel', 403);
+  }
+
+  let replyTo = null;
+  if (replyToId) {
+    const replyMessage = await db.getMessageById(replyToId);
+    if (replyMessage) {
+      replyTo = {
+        id: replyMessage.id,
+        content: replyMessage.content,
+        type: replyMessage.type,
+        senderId: replyMessage.senderId,
+      };
+    }
+  }
+
+  const newMessage = {
+    id: uuidv4(),
+    channelId,
+    senderId,
+    content: content || '',
+    type: file?.type || MESSAGE_TYPE.FILE,
+    fileUrl: file?.url || null,
+    fileName: file?.name || null,
+    fileSize: file?.size || null,
+    replyToId: replyToId || null,
+    replyTo: replyTo,
+    isEdited: false,
+    isDeleted: false,
+    reactions: [],
+    status: MESSAGE_STATUS.SENT,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+
+  await db.createMessage(newMessage);
+
+  await db.updateChannel(channelId, {
+    updatedAt: new Date().toISOString(),
+  });
+
+  return newMessage;
+};
+
 export const getChannelMessages = async (channelId, userId) => {
   const channel = await db.getChannelById(channelId);
   if (!channel) {

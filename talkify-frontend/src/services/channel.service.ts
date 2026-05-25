@@ -48,6 +48,13 @@ export const channelService = {
     return response.data;
   },
 
+  sendMessageWithFile: async (channelId: string, formData: FormData): Promise<ApiResponse<Message>> => {
+    const response = await api.post(`/channels/${channelId}/messages/upload`, formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return response.data;
+  },
+
   updateChannel: async (
     channelId: string,
     data: {

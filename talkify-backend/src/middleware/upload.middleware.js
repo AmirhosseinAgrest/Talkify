@@ -85,6 +85,14 @@ export const uploadAvatar = multer({
   },
 });
 
+export const uploadMessageFile = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: {
+    fileSize: UPLOAD_CONFIG.MAX_FILE_SIZE,
+  },
+});
+
 export const getMessageType = (mimeType) => {
   if (UPLOAD_CONFIG.ALLOWED_IMAGE_TYPES.includes(mimeType)) return 'image';
   if (UPLOAD_CONFIG.ALLOWED_VIDEO_TYPES.includes(mimeType)) return 'video';
