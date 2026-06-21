@@ -34,7 +34,7 @@ export function MediaViewer({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl p-0 overflow-hidden">
+      <DialogContent className="max-w-4xl p-0 overflow-hidden [&>button:last-child]:hidden">
         <div className="flex items-center justify-between p-4 border-b">
           <span className="font-medium truncate">{fileName || 'File'}</span>
           <div className="flex items-center gap-2">

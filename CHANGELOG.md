@@ -6,6 +6,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.1] - 2026-06-21
+
+### Changed (Frontend Only)
+
+#### ChannelMessageBubble Redesign
+- Removed sender avatar and username from channel messages
+- Simplified message display with clean minimal style
+- Time stamp displayed below each message
+- Unified gray background for all channel messages
+
+### Removed (Frontend Only)
+
+- Removed sender avatar from channel messages
+- Removed sender username from channel messages
+- Removed VerifiedBadge from channel messages
+- Removed unnecessary API calls for sender info
+- Removed useAuthStore dependency from ChannelMessageBubble
+
+---
+
 ## [1.5.0] - 2026-05-25
 
 ### New Features
