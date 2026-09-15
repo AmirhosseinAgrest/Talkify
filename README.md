@@ -1,118 +1,211 @@
-# **Talkify — Modern Messaging Platform**
-A modern, full‑featured messaging system with real‑time chat, channels, reactions, admin tools, and a polished UI/UX — engineered with clean architecture and production‑ready standards.
+# Talkify — Modern Messaging Platform
 
-> A flagship portfolio project by **Amirhossein Agrest**, showcasing system design, security‑first backend logic, and premium frontend engineering.
+Talkify is an open-source, production-oriented messaging platform built to demonstrate a real-world full-stack architecture. It provides real-time private chat, channels, an admin dashboard, and file messaging — implemented with a clean, modular architecture and a polished UI.
+
+> A flagship portfolio project by **Amirhossein Agrest**, showcasing system design, backend access-control logic, and premium frontend engineering.
 
 ---
 
 ## ✨ Features
 
-- Real‑time private chat  
-- Channel system with verification badges  
-- Admin panel for managing users, channels, and broadcasts  
-- Message editing, deleting, reactions, and status tracking  
-- File & media messaging (images, videos, documents)  
-- System chat for support communication  
-- Global broadcast messaging  
-- Clean, modular backend with strict access control  
-- Fully translated, production‑ready English UI  
+- Real-time private chat with typing indicators, reactions, and status (sending → sent → delivered → seen)
+- Channel system with owner/admin/member roles and verification badges
+- Message editing, deleting, replying, and status tracking
+- File & media messaging (images, videos, audio, documents) — in chats and channels
+- System / support chat and global broadcast messaging
+- Blocking, reporting, and suspension flows
+- Admin panel for users, channels, reports, suspensions, broadcasts, and manual messages
+- Polished, responsive UI (English)
 
 ---
 
 ## 🧠 Overview
 
-Talkify is built as a modern messaging ecosystem inspired by platforms like Telegram and Discord.  
-It includes:
+Talkify models a modern messenger inspired by Telegram and Discord:
 
-- A secure backend with strict permission rules  
-- A polished, responsive frontend  
-- A complete admin dashboard  
-- A scalable architecture suitable for real production environments  
-
-This project demonstrates real engineering ability — not just UI work.
+- A Node.js + Express + Socket.IO backend with strict permission checks
+- A React + TypeScript + Tailwind + shadcn/ui frontend
+- An admin dashboard for moderation
+- A layered backend architecture suitable for evolving toward production persistence
 
 ---
 
-## 🧩 Tech Stack
+## 🧩 Technology Stack
 
-### **Frontend**
-- React + TypeScript  
-- Tailwind CSS  
-- ShadCN UI  
-- Zustand  
-- Vite  
+### Frontend (`talkify-frontend`)
 
-### **Backend**
-- Node.js  
-- Custom DB service layer  
-- Clean modular architecture  
-- UUID-based resource IDs  
+- **React 18** + **TypeScript 5** + **Vite 5** (`@vitejs/plugin-react-swc`)
+- **Tailwind CSS 3** + **Autoprefixer** + `tailwindcss-animate`
+- **shadcn/ui** on **Radix UI** primitives
+- **Zustand** (client state) + **TanStack Query** (server state) + **React Router 6**
+- **Socket.IO client 4** + **Axios** + **Zod** + **React Hook Form**
+- Supporting libs: `emoji-picker-react`, `date-fns`, `lucide-react`
+
+### Backend (`talkify-backend`)
+
+- **Node.js** (ES modules, `type: module`) + **Express 4**
+- **Socket.IO 4** (real-time handlers)
+- **JWT (`jsonwebtoken`)** + **bcryptjs** (auth)
+- **Multer** (file uploads) + **uuid** + **cors** + **dotenv**
+- **Nodemon** (development)
 
 ---
 
-## 🔐 Security & Access Control
-- Users can only access chats they participate in
+## 🏗 Architecture & Project Structure
 
-- Users can only edit/delete their own messages
-
-- Deleted messages cannot be edited
-
-- System chat is protected from unauthorized messages
-
-- Clean error handling with formatError
-
-### Example:
-
-```bash
-if (!chat.participantIds.includes(userId)) {
-  throw formatError('You do not have access to this chat', 403);
-}
+```text
+Talkify/
+├── talkify-backend/              # Express + Socket.IO API
+│   ├── src/
+│   │   ├── routes/
+│   │   ├── controllers/
+│   │   ├── services/
+│   │   ├── middleware/
+│   │   ├── socket/
+│   │   ├── utils/
+│   │   └── index.js
+│   ├── data/
+│   │   └── uploads/
+│   ├── scripts/
+│   ├── package.json
+│   ├── .env.example
+│   └── nodemon.json
+├── talkify-frontend/            # React + Vite SPA
+│   ├── src/
+│   │   ├── components/
+│   │   ├── features/
+│   │   ├── pages/
+│   │   ├── store/
+│   │   ├── services/
+│   │   ├── lib/
+│   │   └── types/
+│   ├── public/
+│   ├── vite.config.ts
+│   ├── tailwind.config.ts
+│   ├── tsconfig.*.json
+│   └── package.json
+├── LICENSE (MIT)
+└── README.md
 ```
+
+**Backend layering:**
+
+```text
+routes → controllers → services → db.service
+```
+
+---
+
+## ✅ Prerequisites
+
+- **Node.js 18+**
+- **npm 9+**
+- **Git**
 
 ---
 
 ## 📦 Installation
+
 ```bash
 git clone https://github.com/AmirhosseinAgrest/Talkify.git
-cd talkify
-cd talkify-frontend
-npm install
+cd Talkify
+
+# backend
 cd talkify-backend
-npm install
+npm ci
+
+# frontend
+cd ../talkify-frontend
+npm ci
 ```
 
 ---
 
-## 🛠 Development
-### Frontend:
+## ⚙️ Environment Configuration
+
+### Backend
+
+```bash
+cd talkify-backend
+cp .env.example .env
+```
+
+Required variable:
+
+| Variable | Required | Description |
+|---|---|---|
+| `JWT_SECRET` | Yes | HMAC key for signing/verifying JWTs |
+
+Other variables (`PORT`, `CLIENT_URL`, `NODE_ENV`, `JWT_EXPIRES_IN`) have defaults and are documented in `.env.example`.
+
+### Frontend
+
+No `.env` needed in development. Vite proxies `/api` and `/uploads` to `http://localhost:3001`.
+
+---
+
+## 🚀 Running Locally (Development)
+
+You need **two terminals**.
+
+**1. Backend**
+
+```bash
+cd talkify-backend
+cp .env.example .env
+npm run dev
+```
+
+Backend runs at `http://localhost:3001`.
+
+**2. Frontend**
 
 ```bash
 cd talkify-frontend
 npm run dev
 ```
 
-### Backend:
-
-```bash
-cd talkify-backend
-npm run dev
-```
+Frontend runs at `http://localhost:5173`.
 
 ---
 
-## 📜 API Examples
-```bash
-export const deleteMessageById = async (messageId, userId) => {
-  const message = await db.getMessageById(messageId);
-  if (!message) throw formatError('Message not found', 404);
-  if (message.senderId !== userId) throw formatError('You cannot delete this message', 403);
+## 🏗 Production Build
 
-  return await db.updateMessage(messageId, {
-    isDeleted: true,
-    content: 'This message has been deleted',
-  });
-};
+**Frontend only:**
+
+```bash
+cd talkify-frontend
+npm run build
+npm run preview
 ```
+
+**Backend** has no build step — it runs as `node src/index.js`.
+
 ---
+
+## 🤝 Contributing
+
+Issues and pull requests are welcome.
+
+- Open an issue describing the change
+- Keep PRs focused on one concern
+- Follow the existing `routes → controllers → services → db.service` layering
+
+---
+
+## 🔒 Security
+
+If you discover a security issue, please open a private issue or contact the maintainer directly instead of filing a public issue with exploit details.
+
+Backend authentication uses `JWT` + `bcryptjs` (12 rounds); `JWT_SECRET` must be set to a strong random value and never committed.
+
+---
+
+## 📄 License
+
+MIT — see [`LICENSE`](./LICENSE).
+
+---
+
 ## 👤 Author
- **Amirhossein Agrest** Creator & Lead Developer Open‑source advocate and system architect
+**Amirhossein Agrest** — Creator & Lead Developer. Open-source advocate and system architect.
