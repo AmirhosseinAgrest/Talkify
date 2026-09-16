@@ -3,11 +3,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as db from './db.service.js';
 import { formatError } from '../utils/helpers.js';
-import { CHANNEL_ROLES, MESSAGE_STATUS, MESSAGE_TYPE } from '../utils/constants.js';
+import { MESSAGE_STATUS, MESSAGE_TYPE } from '../utils/constants.js';
 
 export const createChannel = async (ownerId, { name, username, description, avatar }) => {
   if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
-    throw formatError('Username must be 3–30 characters and contain only letters, numbers, and underscores', 400);
+    throw formatError(
+      'Username must be 3–30 characters and contain only letters, numbers, and underscores',
+      400
+    );
   }
 
   const existingChannel = await db.getChannelByUsername(username);
@@ -186,7 +189,12 @@ export const removeAdmin = async (channelId, userId, targetUserId) => {
   return updatedChannel;
 };
 
-export const sendChannelMessage = async (channelId, senderId, content, type = MESSAGE_TYPE.TEXT) => {
+export const sendChannelMessage = async (
+  channelId,
+  senderId,
+  content,
+  type = MESSAGE_TYPE.TEXT
+) => {
   const channel = await db.getChannelById(channelId);
   if (!channel) {
     throw formatError('Channel not found', 404);
@@ -215,7 +223,13 @@ export const sendChannelMessage = async (channelId, senderId, content, type = ME
   return newMessage;
 };
 
-export const sendChannelMessageWithFile = async (channelId, senderId, content, file, replyToId = null) => {
+export const sendChannelMessageWithFile = async (
+  channelId,
+  senderId,
+  content,
+  file,
+  replyToId = null
+) => {
   const channel = await db.getChannelById(channelId);
   if (!channel) {
     throw formatError('Channel not found', 404);
@@ -309,7 +323,7 @@ export const updateChannel = async (channelId, userId, updates) => {
     if (existingChannel && existingChannel.id !== channelId) {
       throw formatError('This username is already taken by another channel', 400);
     }
-    
+
     const existingUser = await db.getUserByUsername(updates.username);
     if (existingUser) {
       throw formatError('This username is already taken by a user', 400);

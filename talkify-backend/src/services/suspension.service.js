@@ -98,9 +98,7 @@ export const getActiveSuspensions = async () => {
   const suspensions = await db.getSuspensions();
   const now = new Date();
 
-  return suspensions.filter(
-    (s) => s.isActive && new Date(s.expiresAt) > now
-  );
+  return suspensions.filter((s) => s.isActive && new Date(s.expiresAt) > now);
 };
 
 export const getAllSuspensions = async () => {

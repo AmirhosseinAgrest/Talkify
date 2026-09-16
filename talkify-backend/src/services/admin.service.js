@@ -16,7 +16,7 @@ export const isSuperAdmin = async (userId) => {
 
 export const getAllUsers = async () => {
   const users = await db.getUsers();
-  return users.map(({ password, ...user }) => user);
+  return users.map(({ password: _, ...user }) => user);
 };
 
 export const getAllChannels = async () => {
@@ -25,11 +25,7 @@ export const getAllChannels = async () => {
 
 export const verifyUser = async (adminId, targetUserId) => {
   const admin = await db.getUserById(adminId);
-  if (
-    !admin ||
-    (admin.role !== SYSTEM_ROLES.ADMIN &&
-      admin.role !== SYSTEM_ROLES.SUPER_ADMIN)
-  ) {
+  if (!admin || (admin.role !== SYSTEM_ROLES.ADMIN && admin.role !== SYSTEM_ROLES.SUPER_ADMIN)) {
     throw formatError('You do not have admin access', 403);
   }
 
@@ -44,7 +40,7 @@ export const verifyUser = async (adminId, targetUserId) => {
     verifiedBy: adminId,
   });
 
-  const { password, ...safeUser } = updatedUser;
+  const { password: _, ...safeUser } = updatedUser;
   return safeUser;
 };
 
@@ -52,7 +48,6 @@ export const unverifyUser = async (adminId, targetUserId) => {
   const admin = await db.getUserById(adminId);
   if (!admin || (admin.role !== SYSTEM_ROLES.ADMIN && admin.role !== SYSTEM_ROLES.SUPER_ADMIN)) {
     throw formatError('You do not have admin access', 403);
-
   }
 
   const updatedUser = await db.updateUser(targetUserId, {
@@ -61,7 +56,7 @@ export const unverifyUser = async (adminId, targetUserId) => {
     verifiedBy: null,
   });
 
-  const { password, ...safeUser } = updatedUser;
+  const { password: _, ...safeUser } = updatedUser;
   return safeUser;
 };
 
@@ -103,14 +98,14 @@ export const unverifyChannel = async (adminId, channelId) => {
 export const addSystemAdmin = async (superAdminId, targetUserId) => {
   const superAdmin = await db.getUserById(superAdminId);
   if (!superAdmin || superAdmin.role !== SYSTEM_ROLES.SUPER_ADMIN) {
-   throw formatError('Only the super admin can add an admin', 403);
+    throw formatError('Only the super admin can add an admin', 403);
   }
 
   const updatedUser = await db.updateUser(targetUserId, {
     role: SYSTEM_ROLES.ADMIN,
   });
 
-  const { password, ...safeUser } = updatedUser;
+  const { password: _, ...safeUser } = updatedUser;
   return safeUser;
 };
 
@@ -124,7 +119,7 @@ export const removeSystemAdmin = async (superAdminId, targetUserId) => {
     role: SYSTEM_ROLES.USER,
   });
 
-  const { password, ...safeUser } = updatedUser;
+  const { password: _, ...safeUser } = updatedUser;
   return safeUser;
 };
 

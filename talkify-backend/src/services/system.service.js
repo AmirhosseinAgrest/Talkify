@@ -35,7 +35,7 @@ export const sendSystemMessage = async (userId, content, type = 'notification') 
     senderId: systemAccount.id,
     content,
     type: MESSAGE_TYPE.TEXT,
-    systemMessageType: type, 
+    systemMessageType: type,
     isSystemMessage: true,
     status: MESSAGE_STATUS.SENT,
     createdAt: new Date().toISOString(),
@@ -74,14 +74,14 @@ The Talkify Team 💙`;
 export const sendSuspensionNotification = async (userId, reason, expiresAt, isPermanent) => {
   const formatDuration = () => {
     if (isPermanent) return 'permanently';
-    
+
     const expires = new Date(expiresAt);
     const now = new Date();
     const diff = expires - now;
-    
+
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    
+
     if (days > 0) return `for ${days} day(s) and ${hours} hour(s)`;
     return `for ${hours} hour(s)`;
   };
@@ -139,7 +139,7 @@ Date: ${new Date().toLocaleString('en-US')}`;
 
   for (const user of targetUsers) {
     try {
-      const result = await sendSystemMessage(user.id, broadcastContent, 'broadcast');
+      await sendSystemMessage(user.id, broadcastContent, 'broadcast');
       results.push({ userId: user.id, success: true });
     } catch (error) {
       results.push({ userId: user.id, success: false, error: error.message });

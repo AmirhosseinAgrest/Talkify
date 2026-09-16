@@ -9,7 +9,7 @@ import adminRoutes from './admin.routes.js';
 import reportRoutes from './report.routes.js';
 import blockRoutes from './block.routes.js';
 import suspensionRoutes from './suspension.routes.js';
-import systemRoutes from './system.routes.js'; 
+import systemRoutes from './system.routes.js';
 
 const router = Router();
 

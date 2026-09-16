@@ -15,12 +15,11 @@ export const searchUsers = async (req, res, next) => {
       const query = q.toLowerCase();
       filteredUsers = filteredUsers.filter(
         (user) =>
-          user.username.toLowerCase().includes(query) ||
-          user.email.toLowerCase().includes(query)
+          user.username.toLowerCase().includes(query) || user.email.toLowerCase().includes(query)
       );
     }
 
-    const safeUsers = filteredUsers.map(({ password, ...user }) => user);
+    const safeUsers = filteredUsers.map(({ password: _, ...user }) => user);
     res.json(formatResponse(true, safeUsers));
   } catch (error) {
     next(error);
@@ -35,7 +34,7 @@ export const getUser = async (req, res, next) => {
       return res.status(404).json(formatResponse(false, null, 'User not found'));
     }
 
-    const { password, ...safeUser } = user;
+    const { password: _, ...safeUser } = user;
     res.json(formatResponse(true, safeUser));
   } catch (error) {
     next(error);
@@ -55,16 +54,14 @@ export const updateProfile = async (req, res, next) => {
     if (username && username !== user.username) {
       const existingUser = await db.getUserByUsername(username);
       if (existingUser && existingUser.id !== userId) {
-        return res.status(400).json(
-          formatResponse(false, null, 'This username is already taken')
-        );
+        return res.status(400).json(formatResponse(false, null, 'This username is already taken'));
       }
-      
+
       const existingChannel = await db.getChannelByUsername(username);
       if (existingChannel) {
-        return res.status(400).json(
-          formatResponse(false, null, 'This username is already taken by a channel')
-        );
+        return res
+          .status(400)
+          .json(formatResponse(false, null, 'This username is already taken by a channel'));
       }
     }
 
@@ -75,7 +72,7 @@ export const updateProfile = async (req, res, next) => {
       updatedAt: new Date().toISOString(),
     });
 
-    const { password, ...safeUser } = updatedUser;
+    const { password: _, ...safeUser } = updatedUser;
     res.json(formatResponse(true, safeUser, 'Profile updated'));
   } catch (error) {
     next(error);
@@ -98,7 +95,7 @@ export const updateAvatar = async (req, res, next) => {
       updatedAt: new Date().toISOString(),
     });
 
-    const { password, ...safeUser } = updatedUser;
+    const { password: _, ...safeUser } = updatedUser;
     res.json(formatResponse(true, safeUser, 'Avatar updated'));
   } catch (error) {
     next(error);
@@ -114,7 +111,7 @@ export const deleteAvatar = async (req, res, next) => {
       updatedAt: new Date().toISOString(),
     });
 
-    const { password, ...safeUser } = updatedUser;
+    const { password: _, ...safeUser } = updatedUser;
     res.json(formatResponse(true, safeUser, 'Avatar removed'));
   } catch (error) {
     next(error);
@@ -127,15 +124,15 @@ export const changePassword = async (req, res, next) => {
     const userId = req.userId;
 
     if (!currentPassword || !newPassword) {
-      return res.status(400).json(
-        formatResponse(false, null, 'Current and new password are required')
-      );
+      return res
+        .status(400)
+        .json(formatResponse(false, null, 'Current and new password are required'));
     }
 
     if (newPassword.length < 6) {
-      return res.status(400).json(
-        formatResponse(false, null, 'New password must be at least 6 characters long')
-      );
+      return res
+        .status(400)
+        .json(formatResponse(false, null, 'New password must be at least 6 characters long'));
     }
 
     const user = await db.getUserById(userId);

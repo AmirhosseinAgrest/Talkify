@@ -50,10 +50,7 @@ export const unverifyUser = async (req, res, next) => {
 
 export const verifyChannel = async (req, res, next) => {
   try {
-    const channel = await adminService.verifyChannel(
-      req.userId,
-      req.params.channelId
-    );
+    const channel = await adminService.verifyChannel(req.userId, req.params.channelId);
     res.json(formatResponse(true, channel, 'Channel verified'));
   } catch (error) {
     next(error);
@@ -62,10 +59,7 @@ export const verifyChannel = async (req, res, next) => {
 
 export const unverifyChannel = async (req, res, next) => {
   try {
-    const channel = await adminService.unverifyChannel(
-      req.userId,
-      req.params.channelId
-    );
+    const channel = await adminService.unverifyChannel(req.userId, req.params.channelId);
     res.json(formatResponse(true, channel, 'Channel verification revoked'));
   } catch (error) {
     next(error);
@@ -74,10 +68,7 @@ export const unverifyChannel = async (req, res, next) => {
 
 export const addSystemAdmin = async (req, res, next) => {
   try {
-    const user = await adminService.addSystemAdmin(
-      req.userId,
-      req.params.userId
-    );
+    const user = await adminService.addSystemAdmin(req.userId, req.params.userId);
     res.json(formatResponse(true, user, 'System admin added'));
   } catch (error) {
     next(error);
@@ -86,10 +77,7 @@ export const addSystemAdmin = async (req, res, next) => {
 
 export const removeSystemAdmin = async (req, res, next) => {
   try {
-    const user = await adminService.removeSystemAdmin(
-      req.userId,
-      req.params.userId
-    );
+    const user = await adminService.removeSystemAdmin(req.userId, req.params.userId);
     res.json(formatResponse(true, user, 'System admin removed'));
   } catch (error) {
     next(error);

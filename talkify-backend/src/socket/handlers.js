@@ -24,7 +24,13 @@ export const handleConnection = (io, socket) => {
 
   socket.on('message:send', async ({ chatId, content, replyToId }) => {
     try {
-      const message = await chatService.sendMessageWithFile(chatId, userId, content, null, replyToId);
+      const message = await chatService.sendMessageWithFile(
+        chatId,
+        userId,
+        content,
+        null,
+        replyToId
+      );
       io.to(chatId).emit('message:receive', message);
 
       const chat = await db.getChatById(chatId);

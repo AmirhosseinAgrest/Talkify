@@ -81,9 +81,7 @@ export const getChatByParticipants = async (userId1, userId2) => {
   const chats = await getChats();
   return (
     chats.find(
-      (chat) =>
-        chat.participantIds.includes(userId1) &&
-        chat.participantIds.includes(userId2)
+      (chat) => chat.participantIds.includes(userId1) && chat.participantIds.includes(userId2)
     ) || null
   );
 };
@@ -155,7 +153,9 @@ export const getChannelById = async (id) => {
 
 export const getChannelByUsername = async (username) => {
   const channels = await getChannels();
-  return channels.find((channel) => channel.username.toLowerCase() === username.toLowerCase()) || null;
+  return (
+    channels.find((channel) => channel.username.toLowerCase() === username.toLowerCase()) || null
+  );
 };
 
 export const getChannelsByUserId = async (userId) => {
@@ -226,12 +226,7 @@ export const addReaction = async (reactionData) => {
 export const removeReaction = async (messageId, userId, emoji) => {
   const reactions = await getReactions();
   const filtered = reactions.filter(
-    (r) =>
-      !(
-        r.messageId === messageId &&
-        r.userId === userId &&
-        r.emoji === emoji
-      )
+    (r) => !(r.messageId === messageId && r.userId === userId && r.emoji === emoji)
   );
   await writeJsonFile('reactions.json', filtered);
 };
@@ -278,9 +273,7 @@ export const getBlockedByUserId = async (userId) => {
 
 export const isBlocked = async (blockerId, blockedId) => {
   const blocks = await getBlocks();
-  return blocks.some(
-    (b) => b.blockerId === blockerId && b.blockedId === blockedId
-  );
+  return blocks.some((b) => b.blockerId === blockerId && b.blockedId === blockedId);
 };
 
 export const createBlock = async (blockData) => {
@@ -292,9 +285,7 @@ export const createBlock = async (blockData) => {
 
 export const removeBlock = async (blockerId, blockedId) => {
   const blocks = await getBlocks();
-  const filtered = blocks.filter(
-    (b) => !(b.blockerId === blockerId && b.blockedId === blockedId)
-  );
+  const filtered = blocks.filter((b) => !(b.blockerId === blockerId && b.blockedId === blockedId));
   await writeJsonFile('blocks.json', filtered);
 };
 
@@ -306,9 +297,8 @@ export const getActiveSuspension = async (userId) => {
   const suspensions = await getSuspensions();
   const now = new Date();
   return (
-    suspensions.find(
-      (s) => s.userId === userId && s.isActive && new Date(s.expiresAt) > now
-    ) || null
+    suspensions.find((s) => s.userId === userId && s.isActive && new Date(s.expiresAt) > now) ||
+    null
   );
 };
 

@@ -24,7 +24,7 @@ export const initializeSocket = (httpServer) => {
       const decoded = verifyToken(token);
       socket.userId = decoded.userId;
       next();
-    } catch (error) {
+    } catch {
       next(new Error('Invalid token'));
     }
   });

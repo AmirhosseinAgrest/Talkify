@@ -56,7 +56,7 @@ export const getBlockedUsers = async (userId) => {
     blocks.map(async (block) => {
       const user = await db.getUserById(block.blockedId);
       if (user) {
-        const { password, ...safeUser } = user;
+        const { password: _, ...safeUser } = user;
         return {
           ...safeUser,
           blockedAt: block.createdAt,

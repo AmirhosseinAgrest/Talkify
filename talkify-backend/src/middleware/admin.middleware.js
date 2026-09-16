@@ -7,15 +7,11 @@ export const requireAdmin = async (req, res, next) => {
   try {
     const isAdmin = await adminService.isAdmin(req.userId);
     if (!isAdmin) {
-      return res.status(403).json(
-        formatResponse(false, null, 'Access restricted to admins only')
-      );
+      return res.status(403).json(formatResponse(false, null, 'Access restricted to admins only'));
     }
     next();
-  } catch (error) {
-    return res.status(500).json(
-      formatResponse(false, null, 'Server error')
-    );
+  } catch {
+    return res.status(500).json(formatResponse(false, null, 'Server error'));
   }
 };
 
@@ -23,14 +19,12 @@ export const requireSuperAdmin = async (req, res, next) => {
   try {
     const isSuperAdmin = await adminService.isSuperAdmin(req.userId);
     if (!isSuperAdmin) {
-      return res.status(403).json(
-        formatResponse(false, null, 'Access restricted to super admins only')
-      );
+      return res
+        .status(403)
+        .json(formatResponse(false, null, 'Access restricted to super admins only'));
     }
     next();
-  } catch (error) {
-    return res.status(500).json(
-      formatResponse(false, null, 'Server error')
-    );
+  } catch {
+    return res.status(500).json(formatResponse(false, null, 'Server error'));
   }
 };

@@ -44,8 +44,7 @@ const parseDeviceFromUserAgent = (userAgent) => {
   else if (ua.includes('linux')) os = 'Linux';
 
   let browser = 'Unknown Browser';
-  if (ua.includes('chrome') && !ua.includes('edge') && !ua.includes('opr'))
-    browser = 'Chrome';
+  if (ua.includes('chrome') && !ua.includes('edge') && !ua.includes('opr')) browser = 'Chrome';
   else if (ua.includes('safari') && !ua.includes('chrome')) browser = 'Safari';
   else if (ua.includes('firefox')) browser = 'Firefox';
   else if (ua.includes('edge')) browser = 'Edge';
@@ -70,7 +69,10 @@ export const register = async ({ username, email, password }) => {
   }
 
   if (!/^[a-zA-Z0-9_]{3,30}$/.test(username)) {
-    throw formatError('Username must be 3–30 characters and contain only letters, numbers, and underscores', 400);
+    throw formatError(
+      'Username must be 3–30 characters and contain only letters, numbers, and underscores',
+      400
+    );
   }
 
   const existingUser = await db.getUserByUsername(username);
@@ -159,9 +161,7 @@ export const login = async ({ email, password, ip, userAgent }) => {
     ...user,
     isOnline: true,
     lastSeen: now,
-    country:
-      user.country ||
-      (country && country !== 'UNKNOWN' ? country : user.country || null),
+    country: user.country || (country && country !== 'UNKNOWN' ? country : user.country || null),
     loginLogs: [...(user.loginLogs || []), loginLog],
     sessions: [...(user.sessions || []), session],
   };
@@ -213,7 +213,7 @@ export const getProfile = async (userId) => {
 export const verifyToken = (token) => {
   try {
     return jwt.verify(token, process.env.JWT_SECRET);
-  } catch (error) {
+  } catch {
     throw formatError('Invalid token', 401);
   }
 };

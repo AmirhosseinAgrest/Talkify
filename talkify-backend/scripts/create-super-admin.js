@@ -18,12 +18,12 @@ const SUPER_ADMIN = {
 async function createSuperAdmin() {
   try {
     const usersPath = path.join(__dirname, '../data/users.json');
-    
+
     let users = [];
     try {
       const data = await fs.readFile(usersPath, 'utf-8');
       users = JSON.parse(data);
-    } catch (error) {
+    } catch {
       users = [];
     }
 

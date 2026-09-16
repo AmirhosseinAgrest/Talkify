@@ -8,17 +8,10 @@ export const suspendUser = async (req, res, next) => {
     const { userId, duration, reason } = req.body;
 
     if (!userId || !duration) {
-      return res.status(400).json(
-        formatResponse(false, null, 'User and duration are required')
-      );
+      return res.status(400).json(formatResponse(false, null, 'User and duration are required'));
     }
 
-    const suspension = await suspensionService.suspendUser(
-      req.userId,
-      userId,
-      duration,
-      reason
-    );
+    const suspension = await suspensionService.suspendUser(req.userId, userId, duration, reason);
 
     res.status(201).json(formatResponse(true, suspension, 'User has been suspended'));
   } catch (error) {
@@ -28,10 +21,7 @@ export const suspendUser = async (req, res, next) => {
 
 export const unsuspendUser = async (req, res, next) => {
   try {
-    const result = await suspensionService.unsuspendUser(
-      req.userId,
-      req.params.suspensionId
-    );
+    const result = await suspensionService.unsuspendUser(req.userId, req.params.suspensionId);
     res.json(formatResponse(true, result, 'Suspension lifted'));
   } catch (error) {
     next(error);

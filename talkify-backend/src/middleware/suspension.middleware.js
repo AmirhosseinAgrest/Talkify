@@ -29,13 +29,17 @@ export const requireNotSuspended = async (req, res, next) => {
       const remaining = Math.ceil((expiresAt - new Date()) / 1000);
 
       return res.status(403).json(
-        formatResponse(false, {
-          isSuspended: true,
-          expiresAt: suspension.expiresAt,
-          reason: suspension.reason,
-          remaining,
-          isPermanent: suspension.isPermanent,
-        }, 'Your account has been suspended')
+        formatResponse(
+          false,
+          {
+            isSuspended: true,
+            expiresAt: suspension.expiresAt,
+            reason: suspension.reason,
+            remaining,
+            isPermanent: suspension.isPermanent,
+          },
+          'Your account has been suspended'
+        )
       );
     }
 

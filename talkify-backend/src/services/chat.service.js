@@ -114,21 +114,14 @@ export const getChatMessages = async (chatId, userId) => {
 
   await Promise.all(
     messages
-      .filter(
-        (msg) =>
-          msg.senderId !== userId &&
-          msg.status !== MESSAGE_STATUS.SEEN
-      )
-      .map((msg) =>
-        db.updateMessageStatus(msg.id, MESSAGE_STATUS.SEEN)
-      )
+      .filter((msg) => msg.senderId !== userId && msg.status !== MESSAGE_STATUS.SEEN)
+      .map((msg) => db.updateMessageStatus(msg.id, MESSAGE_STATUS.SEEN))
   );
 
   return messages;
 };
 
 export const sendMessage = async (chatId, senderId, content, type = MESSAGE_TYPE.TEXT) => {
-
   const chat = await db.getChatById(chatId);
   if (!chat) {
     throw formatError('Chat not found', 404);

@@ -21,10 +21,7 @@ export const createReport = async (reporterId, reportedId, reason, description) 
 
   const reports = await db.getReports();
   const existingReport = reports.find(
-    (r) =>
-      r.reporterId === reporterId &&
-      r.reportedId === reportedId &&
-      r.status === 'pending'
+    (r) => r.reporterId === reporterId && r.reportedId === reportedId && r.status === 'pending'
   );
 
   if (existingReport) {

@@ -8,16 +8,12 @@ export const register = async (req, res, next) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
-      return res
-        .status(400)
-        .json(formatResponse(false, null, 'All fields are required'));
+      return res.status(400).json(formatResponse(false, null, 'All fields are required'));
     }
 
     const result = await authService.register({ username, email, password });
 
-    return res
-      .status(201)
-      .json(formatResponse(true, result, 'Registration successful'));
+    return res.status(201).json(formatResponse(true, result, 'Registration successful'));
   } catch (error) {
     next(error);
   }
@@ -28,18 +24,12 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res
-        .status(400)
-        .json(
-          formatResponse(false, null, 'Email and password are required'),
-        );
+      return res.status(400).json(formatResponse(false, null, 'Email and password are required'));
     }
 
     const ipHeader = req.headers['x-forwarded-for'];
     const ip =
-      (Array.isArray(ipHeader)
-        ? ipHeader[0]
-        : ipHeader?.split(',')[0]?.trim()) || req.ip || null;
+      (Array.isArray(ipHeader) ? ipHeader[0] : ipHeader?.split(',')[0]?.trim()) || req.ip || null;
 
     const userAgent = req.headers['user-agent'] || 'unknown';
 

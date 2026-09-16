@@ -8,17 +8,12 @@ export const createReport = async (req, res, next) => {
     const { reportedId, reason, description } = req.body;
 
     if (!reportedId || !reason) {
-      return res.status(400).json(
-        formatResponse(false, null, 'User and report reason are required')
-      );
+      return res
+        .status(400)
+        .json(formatResponse(false, null, 'User and report reason are required'));
     }
 
-    const report = await reportService.createReport(
-      req.userId,
-      reportedId,
-      reason,
-      description
-    );
+    const report = await reportService.createReport(req.userId, reportedId, reason, description);
 
     res.status(201).json(formatResponse(true, report, 'Report submitted'));
   } catch (error) {
@@ -53,10 +48,7 @@ export const reviewReport = async (req, res, next) => {
 
 export const dismissReport = async (req, res, next) => {
   try {
-    const report = await reportService.dismissReport(
-      req.params.reportId,
-      req.userId
-    );
+    const report = await reportService.dismissReport(req.params.reportId, req.userId);
     res.json(formatResponse(true, report, 'Report dismissed'));
   } catch (error) {
     next(error);

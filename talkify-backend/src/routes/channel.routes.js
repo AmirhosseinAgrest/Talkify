@@ -24,7 +24,11 @@ router.post('/:channelId/leave', channelController.leaveChannel);
 router.get('/:channelId/messages', channelController.getMessages);
 router.post('/:channelId/messages', channelController.sendMessage);
 
-router.post('/:channelId/messages/upload', uploadMessageFile.single('file'), channelController.sendMessageWithFile);
+router.post(
+  '/:channelId/messages/upload',
+  uploadMessageFile.single('file'),
+  channelController.sendMessageWithFile
+);
 
 router.post('/:channelId/admins', channelController.addAdmin);
 router.delete('/:channelId/admins', channelController.removeAdmin);

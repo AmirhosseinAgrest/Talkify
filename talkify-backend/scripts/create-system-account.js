@@ -1,7 +1,6 @@
 // scripts/create-system-account.js
 
 import bcrypt from 'bcryptjs';
-import { v4 as uuidv4 } from 'uuid';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -23,7 +22,7 @@ async function createSystemAccount() {
     try {
       const data = await fs.readFile(usersPath, 'utf-8');
       users = JSON.parse(data);
-    } catch (error) {
+    } catch {
       users = [];
     }
 
@@ -54,7 +53,7 @@ async function createSystemAccount() {
       isSystemAccount: true,
       createdAt: new Date().toISOString(),
     };
-    
+
     users.push(systemAccount);
     await fs.writeFile(usersPath, JSON.stringify(users, null, 2));
 

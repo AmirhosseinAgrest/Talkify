@@ -9,9 +9,7 @@ export const sendBroadcast = async (req, res, next) => {
     const { content } = req.body;
 
     if (!content) {
-      return res.status(400).json(
-        formatResponse(false, null, 'Message content is required')
-      );
+      return res.status(400).json(formatResponse(false, null, 'Message content is required'));
     }
 
     const result = await systemService.sendBroadcastMessage(content, req.userId);
@@ -27,9 +25,9 @@ export const sendManualMessage = async (req, res, next) => {
     const { userId, content } = req.body;
 
     if (!userId || !content) {
-      return res.status(400).json(
-        formatResponse(false, null, 'User and message content are required')
-      );
+      return res
+        .status(400)
+        .json(formatResponse(false, null, 'User and message content are required'));
     }
 
     const result = await systemService.sendManualMessage(userId, content);
@@ -53,12 +51,10 @@ export const getSystemAccount = async (req, res, next) => {
   try {
     const account = await systemService.getSystemAccount();
     if (!account) {
-      return res.status(404).json(
-        formatResponse(false, null, 'System account not found')
-      );
+      return res.status(404).json(formatResponse(false, null, 'System account not found'));
     }
 
-    const { password, ...safeAccount } = account;
+    const { password: _, ...safeAccount } = account;
     res.json(formatResponse(true, safeAccount));
   } catch (error) {
     next(error);

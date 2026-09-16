@@ -8,9 +8,7 @@ export const authenticate = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return res.status(401).json(
-        formatResponse(false, null, 'Token not provided')
-      );
+      return res.status(401).json(formatResponse(false, null, 'Token not provided'));
     }
 
     const token = authHeader.split(' ')[1];
@@ -18,9 +16,7 @@ export const authenticate = async (req, res, next) => {
 
     req.userId = decoded.userId;
     next();
-  } catch (error) {
-    return res.status(401).json(
-      formatResponse(false, null, 'Invalid token')
-    );
+  } catch {
+    return res.status(401).json(formatResponse(false, null, 'Invalid token'));
   }
 };

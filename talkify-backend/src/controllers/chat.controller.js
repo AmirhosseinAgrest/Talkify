@@ -28,9 +28,7 @@ export const createChat = async (req, res, next) => {
     const { participantId } = req.body;
 
     if (!participantId) {
-      return res.status(400).json(
-        formatResponse(false, null, 'User ID is required')
-      );
+      return res.status(400).json(formatResponse(false, null, 'User ID is required'));
     }
 
     const chat = await chatService.createChat(req.userId, participantId);
@@ -54,16 +52,10 @@ export const sendMessage = async (req, res, next) => {
     const { content } = req.body;
 
     if (!content) {
-      return res.status(400).json(
-        formatResponse(false, null, 'Message content is required')
-      );
+      return res.status(400).json(formatResponse(false, null, 'Message content is required'));
     }
 
-    const message = await chatService.sendMessage(
-      req.params.chatId,
-      req.userId,
-      content
-    );
+    const message = await chatService.sendMessage(req.params.chatId, req.userId, content);
     res.status(201).json(formatResponse(true, message));
   } catch (error) {
     next(error);
@@ -75,16 +67,10 @@ export const editMessage = async (req, res, next) => {
     const { content } = req.body;
 
     if (!content) {
-      return res.status(400).json(
-        formatResponse(false, null, 'Message content is required')
-      );
+      return res.status(400).json(formatResponse(false, null, 'Message content is required'));
     }
 
-    const message = await chatService.editMessage(
-      req.params.messageId,
-      req.userId,
-      content
-    );
+    const message = await chatService.editMessage(req.params.messageId, req.userId, content);
 
     res.json(formatResponse(true, message, 'Message edited'));
   } catch (error) {
@@ -94,12 +80,9 @@ export const editMessage = async (req, res, next) => {
 
 export const deleteMessage = async (req, res, next) => {
   try {
-    const message = await chatService.deleteMessageById(
-      req.params.messageId,
-      req.userId
-    );
+    const message = await chatService.deleteMessageById(req.params.messageId, req.userId);
 
-   res.json(formatResponse(true, message, 'Message deleted'));
+    res.json(formatResponse(true, message, 'Message deleted'));
   } catch (error) {
     next(error);
   }
@@ -110,16 +93,10 @@ export const addReaction = async (req, res, next) => {
     const { emoji } = req.body;
 
     if (!emoji) {
-      return res.status(400).json(
-        formatResponse(false, null, 'Emoji is required')
-      );
+      return res.status(400).json(formatResponse(false, null, 'Emoji is required'));
     }
 
-    const reaction = await chatService.addReaction(
-      req.params.messageId,
-      req.userId,
-      emoji
-    );
+    const reaction = await chatService.addReaction(req.params.messageId, req.userId, emoji);
 
     res.status(201).json(formatResponse(true, reaction));
   } catch (error) {
@@ -131,11 +108,7 @@ export const removeReaction = async (req, res, next) => {
   try {
     const { emoji } = req.body;
 
-    await chatService.removeReaction(
-      req.params.messageId,
-      req.userId,
-      emoji
-    );
+    await chatService.removeReaction(req.params.messageId, req.userId, emoji);
 
     res.json(formatResponse(true, null, 'Reaction removed'));
   } catch (error) {
@@ -185,38 +158,33 @@ export const findOrCreateChat = async (req, res, next) => {
 
     if (username && !userId) {
       const users = await db.getUsers();
-      const user = users.find(u => u.username.toLowerCase() === username.toLowerCase());
-      
+      const user = users.find((u) => u.username.toLowerCase() === username.toLowerCase());
+
       if (!user) {
-        return res.status(404).json(
-          formatResponse(false, null, 'User not found with this username')
-        );
+        return res
+          .status(404)
+          .json(formatResponse(false, null, 'User not found with this username'));
       }
       targetUserId = user.id;
     }
 
     if (!targetUserId) {
-      return res.status(400).json(
-        formatResponse(false, null, 'Either userId or username is required')
-      );
+      return res
+        .status(400)
+        .json(formatResponse(false, null, 'Either userId or username is required'));
     }
 
     const user = await db.getUserById(targetUserId);
     if (!user) {
-      return res.status(404).json(
-        formatResponse(false, null, 'User not found')
-      );
+      return res.status(404).json(formatResponse(false, null, 'User not found'));
     }
 
     if (targetUserId === req.userId) {
-      return res.status(400).json(
-        formatResponse(false, null, 'Cannot create chat with yourself')
-      );
+      return res.status(400).json(formatResponse(false, null, 'Cannot create chat with yourself'));
     }
 
     const chat = await chatService.findOrCreateChat(req.userId, targetUserId);
     res.status(201).json(formatResponse(true, chat));
-    
   } catch (error) {
     next(error);
   }
