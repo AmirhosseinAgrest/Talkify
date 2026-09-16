@@ -31,14 +31,18 @@ export default function AdminPage() {
   const user = useAuthStore((state) => state.user);
   const [activeTab, setActiveTab] = useState('users');
 
-  if (!user || (user.role !== 'admin' && user.role !== 'super_admin')) {
-    return <Navigate to="/chat" replace />;
-  }
+  const isAdmin = !!user && (user.role === 'admin' || user.role === 'super_admin');
 
   const { data: stats } = useQuery({
     queryKey: ['admin', 'dashboard'],
     queryFn: () => adminService.getDashboard(),
+    enabled: isAdmin,
   });
+
+  // Guard after the hooks so the hook order stays stable for every render.
+  if (!isAdmin) {
+    return <Navigate to="/chat" replace />;
+  }
 
   return (
     <div className="min-h-screen bg-background">

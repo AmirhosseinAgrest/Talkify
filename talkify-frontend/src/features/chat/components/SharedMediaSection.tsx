@@ -1,6 +1,6 @@
 // src/features/chat/components/SharedMediaSection.tsx
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Image, Film, Mic, Loader2 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { MediaViewer } from '@/components/common/MediaViewer';
@@ -18,11 +18,7 @@ export function SharedMediaSection({ chatId }: SharedMediaSectionProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedMedia, setSelectedMedia] = useState<Message | null>(null);
 
-  useEffect(() => {
-    loadMessages();
-  }, [chatId]);
-
-  const loadMessages = async () => {
+  const loadMessages = useCallback(async () => {
     try {
       const response = await chatService.getMessages(chatId);
       setMessages(response.data);
@@ -31,7 +27,11 @@ export function SharedMediaSection({ chatId }: SharedMediaSectionProps) {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [chatId]);
+
+  useEffect(() => {
+    loadMessages();
+  }, [loadMessages]);
 
   const images = messages.filter((m) => m.type === 'image');
   const videos = messages.filter((m) => m.type === 'video');

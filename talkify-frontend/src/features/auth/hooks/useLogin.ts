@@ -6,6 +6,7 @@ import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/store/useAuthStore';
 import { toast } from 'sonner';
 import type { LoginRequest } from '@/types';
+import { getApiErrorMessage } from '@/lib/api';
 
 export function useLogin() {
   const navigate = useNavigate();
@@ -32,9 +33,9 @@ export function useLogin() {
       }, 100);
     },
 
-    onError: (error: any) => {
+    onError: (error: unknown) => {
       console.error('❌ Login error:', error);
-      toast.error(error.response?.data?.message || 'Login error');
+      toast.error(getApiErrorMessage(error, 'Login error'));
     },
   });
 }

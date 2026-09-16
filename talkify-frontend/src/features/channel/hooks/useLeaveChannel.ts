@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { channelService } from '@/services/channel.service';
 import { useChannelStore } from '@/store/useChannelStore';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/lib/api';
 
 export function useLeaveChannel() {
   const navigate = useNavigate();
@@ -19,8 +20,8 @@ export function useLeaveChannel() {
       navigate('/chat');
       toast.success('You have left the channel');
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error leaving the channel');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Error leaving the channel'));
     },
   });
 }

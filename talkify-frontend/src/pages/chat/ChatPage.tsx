@@ -21,17 +21,10 @@ import { SystemChatInput } from '@/features/chat/components/SystemChatInput';
 import { toast } from 'sonner';
 import type { Message } from '@/types';
 import { chatService } from '@/services/chat.service';
+import { getApiErrorMessage, getApiErrorStatus } from '@/lib/api';
 
 export default function ChatPage() {
   const { username } = useParams<{ username: string }>();
-  if (!username) {
-    return (
-      <EmptyState
-        title="No user selected"
-        description="Select a user from the list"
-      />
-    );
-  }
   const [chatId, setChatId] = useState<string | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
 
@@ -57,8 +50,8 @@ export default function ChatPage() {
         const chatRes = await chatService.findOrCreateChat(username);
         setChatId(chatRes.data.id);
         useChatStore.getState().setActiveChat(chatRes.data);
-      } catch (error: any) {
-        if (error?.response?.status !== 404) {
+      } catch (error) {
+        if (getApiErrorStatus(error) !== 404) {
           console.error('Error finding chat:', error);
           toast.error('Failed to load chat');
         }
@@ -115,6 +108,16 @@ export default function ChatPage() {
     setSuspension(null);
   }, [chatId]);
 
+  // Guard placed after every hook so the hook order stays stable for all renders.
+  if (!username) {
+    return (
+      <EmptyState
+        title="No user selected"
+        description="Select a user from the list"
+      />
+    );
+  }
+
   const handleReply = (message: Message) => setReplyTo(message);
   const handleCancelReply = () => setReplyTo(null);
 
@@ -157,19 +160,10 @@ export default function ChatPage() {
         isBlocked: blockStatus?.blockedMe || false,
       });
       toast.success('User unblocked');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error unblocking user');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Error unblocking user'));
     }
   };
-
-  if (!username) {
-    return (
-      <EmptyState
-        title="No user selected"
-        description="Select a user from the list on the right"
-      />
-    );
-  }
 
   if (isLoadingUser) {
     return <LoadingSpinner className="flex-1" />;

@@ -14,6 +14,7 @@ import { adminService } from '@/services/admin.service';
 import { systemService } from '@/services/system.service';
 import { toast } from 'sonner';
 import type { User } from '@/types';
+import { getApiErrorMessage } from '@/lib/api';
 
 const API_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3001';
 
@@ -35,8 +36,8 @@ export function ManualMessageTab() {
       setContent('');
       setSelectedUser(null);
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to send message');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Failed to send message'));
     },
   });
 

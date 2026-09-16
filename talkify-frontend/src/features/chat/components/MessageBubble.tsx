@@ -35,14 +35,18 @@ export function MessageBubble({
   onDelete,
   onReaction,
 }: MessageBubbleProps) {
-  if (message.isSystemMessage) {
-    return <SystemMessageBubble message={message} />;
-  }
+  // Hooks must run in the same order on every render, so they are all called
+  // before the system-message branch below.
   const [mediaOpen, setMediaOpen] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [isDownloaded, setIsDownloaded] = useState(false);
 
   const currentUser = useAuthStore((state) => state.user);
+
+  if (message.isSystemMessage) {
+    return <SystemMessageBubble message={message} />;
+  }
+
   const isMine = message.senderId === currentUser?.id;
 
   const fileUrl = message.fileUrl ? `${API_URL}${message.fileUrl}` : '';

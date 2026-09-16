@@ -6,6 +6,7 @@ import { chatService } from '@/services/chat.service';
 import { useChatStore } from '@/store/useChatStore';
 import { useAuthStore } from '@/store/useAuthStore';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/lib/api';
 
 export function useCreateChat() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ export function useCreateChat() {
       queryClient.invalidateQueries({ queryKey: ['chats'] });
 
       setActiveChat(chat);
-      const otherUser = chat.participants?.find((p: any) => p.id !== currentUser?.id);
+      const otherUser = chat.participants?.find((p) => p.id !== currentUser?.id);
       if (otherUser?.username) {
         navigate(`/${otherUser.username}`);
       } else {
@@ -30,8 +31,8 @@ export function useCreateChat() {
 
       toast.success('New chat created');
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error creating chat');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Error creating chat'));
     },
   });
 }

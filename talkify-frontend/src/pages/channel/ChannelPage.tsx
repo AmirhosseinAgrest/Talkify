@@ -36,13 +36,10 @@ export default function ChannelPage() {
         
         setChannelId(channel.id);
         setActiveChannel(channel);
-      } catch (error: any) {
+      } catch (error) {
         console.error('Error finding channel:', error);
-        if (error.response?.status === 404) {
-          setChannelId(null);
-        } else {
-          setChannelId(null);
-        }
+        // A missing channel (404) and a failed request both leave nothing to display.
+        setChannelId(null);
       } finally {
         setIsLoadingChannel(false);
       }

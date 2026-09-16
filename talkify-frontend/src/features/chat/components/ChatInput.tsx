@@ -15,6 +15,7 @@ import { useSocketStore } from '@/store/useSocketStore';
 import { chatService } from '@/services/chat.service';
 import { toast } from 'sonner';
 import type { Message } from '@/types';
+import { getApiErrorMessage } from '@/lib/api';
 
 interface ChatInputProps {
   replyTo: Message | null;
@@ -96,9 +97,11 @@ export function ChatInput({ replyTo, onCancelReply }: ChatInputProps) {
 
       onCancelReply();
       toast.success('File sent');
-    } catch (error: any) {
-      if (error.name !== 'CanceledError') {
-        toast.error(error.response?.data?.message || 'Error sending file');
+    } catch (error) {
+      // An aborted upload rejects with a CanceledError: keep that silent.
+      const isCanceled = error instanceof Error && error.name === 'CanceledError';
+      if (!isCanceled) {
+        toast.error(getApiErrorMessage(error, 'Error sending file'));
       }
     } finally {
       setUploadingFile(null);

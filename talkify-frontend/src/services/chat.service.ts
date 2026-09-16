@@ -1,7 +1,7 @@
 // src/services/chat.service.ts
 
 import { api } from '@/lib/api';
-import type { Chat, Message, ApiResponse } from '@/types';
+import type { Chat, Message, Reaction, ApiResponse } from '@/types';
 
 export const chatService = {
   getChats: async (): Promise<ApiResponse<Chat[]>> => {
@@ -56,12 +56,12 @@ export const chatService = {
     return response.data;
   },
 
-  addReaction: async (messageId: string, emoji: string): Promise<ApiResponse<any>> => {
+  addReaction: async (messageId: string, emoji: string): Promise<ApiResponse<Reaction>> => {
     const response = await api.post(`/chats/messages/${messageId}/reactions`, { emoji });
     return response.data;
   },
 
-  removeReaction: async (messageId: string, emoji: string): Promise<ApiResponse<any>> => {
+  removeReaction: async (messageId: string, emoji: string): Promise<ApiResponse<null>> => {
     const response = await api.delete(`/chats/messages/${messageId}/reactions`, {
       data: { emoji },
     });

@@ -12,6 +12,7 @@ import { Separator } from '@/components/ui/separator';
 import { systemService, Broadcast } from '@/services/system.service';
 import { formatDate } from '@/lib/utils';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/lib/api';
 
 export function BroadcastTab() {
   const [content, setContent] = useState('');
@@ -29,8 +30,8 @@ export function BroadcastTab() {
       toast.success(`Message sent to ${response.data.sent} users`);
       setContent('');
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to send message');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Failed to send message'));
     },
   });
 

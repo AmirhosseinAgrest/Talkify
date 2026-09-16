@@ -6,6 +6,7 @@ import { channelService } from '@/services/channel.service';
 import { useChannelStore } from '@/store/useChannelStore';
 import { toast } from 'sonner';
 import type { CreateChannelForm } from '@/types';
+import { getApiErrorMessage } from '@/lib/api';
 
 export function useCreateChannel() {
   const navigate = useNavigate();
@@ -20,8 +21,8 @@ export function useCreateChannel() {
       navigate(`/${response.data.username}`);
       toast.success('Channel created! 📢');
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error creating channel');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Error creating channel'));
     },
   });
 }

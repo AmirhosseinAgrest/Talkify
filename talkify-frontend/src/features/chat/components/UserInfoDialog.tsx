@@ -1,6 +1,6 @@
 // src/features/chat/components/UserInfoDialog.tsx
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   Sheet,
   SheetContent,
@@ -30,6 +30,7 @@ import { blockService, BlockStatus } from '@/services/block.service';
 import { formatDate } from '@/lib/utils';
 import { toast } from 'sonner';
 import type { User } from '@/types';
+import { getApiErrorMessage } from '@/lib/api';
 
 const API_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3001';
 
@@ -48,13 +49,7 @@ export function UserInfoDialog({ open, onOpenChange, user, chatId }: UserInfoDia
 
   const avatarUrl = user.avatar ? `${API_URL}${user.avatar}` : undefined;
 
-  useEffect(() => {
-    if (open && user.id) {
-      loadBlockStatus();
-    }
-  }, [open, user.id]);
-
-  const loadBlockStatus = async () => {
+  const loadBlockStatus = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await blockService.checkStatus(user.id);
@@ -64,7 +59,13 @@ export function UserInfoDialog({ open, onOpenChange, user, chatId }: UserInfoDia
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [user.id]);
+
+  useEffect(() => {
+    if (open && user.id) {
+      loadBlockStatus();
+    }
+  }, [open, user.id, loadBlockStatus]);
 
   const handleBlock = async () => {
     setIsBlocking(true);
@@ -72,8 +73,8 @@ export function UserInfoDialog({ open, onOpenChange, user, chatId }: UserInfoDia
       await blockService.block(user.id);
       setBlockStatus({ ...blockStatus!, blockedByMe: true, isBlocked: true });
       toast.success('User blocked');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error blocking user');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Error blocking user'));
     } finally {
       setIsBlocking(false);
     }
@@ -89,8 +90,8 @@ export function UserInfoDialog({ open, onOpenChange, user, chatId }: UserInfoDia
         isBlocked: blockStatus?.blockedMe || false,
       });
       toast.success('User unblocked');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error unblocking user');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Error unblocking user'));
     } finally {
       setIsBlocking(false);
     }

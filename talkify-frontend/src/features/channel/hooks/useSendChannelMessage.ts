@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { channelService } from '@/services/channel.service';
 import { useChannelStore } from '@/store/useChannelStore';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/lib/api';
 
 export function useSendChannelMessage() {
   const queryClient = useQueryClient();
@@ -16,8 +17,8 @@ export function useSendChannelMessage() {
       addMessage(response.data);
       queryClient.invalidateQueries({ queryKey: ['channels', 'my'] });
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error sending message');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Error sending message'));
     },
   });
 }

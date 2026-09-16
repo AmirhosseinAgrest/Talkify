@@ -35,8 +35,8 @@ export function ChannelHeader() {
         onSuccess: () => {
           toast.success(`Left ${activeChannel.name}`);
         },
-        onError: (error) => {
-          toast.error(error.message || 'Failed to leave channel');
+        onError: (error: unknown) => {
+          toast.error(error instanceof Error && error.message ? error.message : 'Failed to leave channel');
         }
       });
     }

@@ -17,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { channelService } from '@/services/channel.service';
 import { useState, useRef, useEffect } from 'react';
+import { getApiErrorMessage } from '@/lib/api';
 
 interface ChannelInfoDialogProps {
   open: boolean;
@@ -81,8 +82,8 @@ export function ChannelInfoDialog({
 
       const fullChannel = await channelService.getChannel(channel.id);
       onChannelUpdated?.(fullChannel.data);
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to update channel');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to update channel'));
     } finally {
       setIsSaving(false);
     }
@@ -99,8 +100,8 @@ export function ChannelInfoDialog({
         const fullChannel = await channelService.getChannel(channel.id);
         onChannelUpdated(fullChannel.data);
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to remove avatar');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to remove avatar'));
     } finally {
       setIsSaving(false);
     }
@@ -130,8 +131,8 @@ export function ChannelInfoDialog({
         const fullChannel = await channelService.getChannel(channel.id);
         onChannelUpdated(fullChannel.data);
       }
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Failed to upload avatar');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to upload avatar'));
     } finally {
       setIsSaving(false);
     }

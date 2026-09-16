@@ -16,6 +16,7 @@ import { Loader2, Flag } from 'lucide-react';
 import { reportService, REPORT_REASONS } from '@/services/report.service';
 import { toast } from 'sonner';
 import type { User } from '@/types';
+import { getApiErrorMessage } from '@/lib/api';
 
 interface ReportUserDialogProps {
   open: boolean;
@@ -41,8 +42,8 @@ export function ReportUserDialog({ open, onOpenChange, user }: ReportUserDialogP
       onOpenChange(false);
       setReason('');
       setDescription('');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error submitting report');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Error submitting report'));
     } finally {
       setIsSubmitting(false);
     }

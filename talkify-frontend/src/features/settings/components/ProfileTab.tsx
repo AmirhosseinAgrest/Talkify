@@ -15,6 +15,7 @@ import { VerifiedBadge } from '@/components/common/VerifiedBadge';
 import { useAuthStore } from '@/store/useAuthStore';
 import { userService } from '@/services/user.service';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/lib/api';
 
 const API_URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3001';
 
@@ -68,8 +69,8 @@ export function ProfileTab() {
             const response = await userService.updateAvatar(file);
             setUser(response.data);
             toast.success('Avatar updated');
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Error uploading avatar');
+        } catch (error) {
+            toast.error(getApiErrorMessage(error, 'Error uploading avatar'));
         } finally {
             setIsUploading(false);
         }
@@ -83,8 +84,8 @@ export function ProfileTab() {
             const response = await userService.deleteAvatar();
             setUser(response.data);
             toast.success('Avatar deleted');
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Error deleting avatar');
+        } catch (error) {
+            toast.error(getApiErrorMessage(error, 'Error deleting avatar'));
         } finally {
             setIsUploading(false);
         }
@@ -96,8 +97,8 @@ export function ProfileTab() {
             const response = await userService.updateProfile(data);
             setUser(response.data);
             toast.success('Profile updated');
-        } catch (error: any) {
-            toast.error(error.response?.data?.message || 'Error updating profile');
+        } catch (error) {
+            toast.error(getApiErrorMessage(error, 'Error updating profile'));
         } finally {
             setIsSaving(false);
         }

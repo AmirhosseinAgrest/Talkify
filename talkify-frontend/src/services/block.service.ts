@@ -9,13 +9,20 @@ export interface BlockStatus {
   isBlocked: boolean;
 }
 
+interface Block {
+  id: string;
+  blockerId: string;
+  blockedId: string;
+  createdAt: string;
+}
+
 export const blockService = {
-  block: async (userId: string): Promise<ApiResponse<any>> => {
+  block: async (userId: string): Promise<ApiResponse<Block>> => {
     const response = await api.post('/blocks', { userId });
     return response.data;
   },
 
-  unblock: async (userId: string): Promise<ApiResponse<any>> => {
+  unblock: async (userId: string): Promise<ApiResponse<null>> => {
     const response = await api.delete('/blocks', { data: { userId } });
     return response.data;
   },

@@ -26,7 +26,7 @@ export const suspensionService = {
     return response.data;
   },
 
-  unsuspend: async (suspensionId: string): Promise<ApiResponse<any>> => {
+  unsuspend: async (suspensionId: string): Promise<ApiResponse<{ message: string }>> => {
     const response = await api.delete(`/suspensions/${suspensionId}`);
     return response.data;
   },

@@ -22,6 +22,7 @@ import {
 import { Key, LogOut, Trash2, Loader2, Eye, EyeOff } from 'lucide-react';
 import { userService } from '@/services/user.service';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/lib/api';
 
 const passwordSchema = z
   .object({
@@ -61,8 +62,8 @@ export function SecurityTab({ onLogout }: SecurityTabProps) {
       await userService.changePassword(data.currentPassword, data.newPassword);
       toast.success('Password changed');
       reset();
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error changing password');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Error changing password'));
     } finally {
       setIsChangingPassword(false);
     }
@@ -79,8 +80,8 @@ export function SecurityTab({ onLogout }: SecurityTabProps) {
       await userService.deleteAccount(deletePassword);
       toast.success('Account deleted');
       onLogout();
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Error deleting account');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Error deleting account'));
     } finally {
       setIsDeleting(false);
     }

@@ -6,6 +6,7 @@ import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/store/useAuthStore';
 import { toast } from 'sonner';
 import type { RegisterForm } from '@/types';
+import { getApiErrorMessage } from '@/lib/api';
 
 export function useRegister() {
   const navigate = useNavigate();
@@ -25,8 +26,8 @@ export function useRegister() {
       navigate('/');
     },
 
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Signup error');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Signup error'));
     },
   });
 }

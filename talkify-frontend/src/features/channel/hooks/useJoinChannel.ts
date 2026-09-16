@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { channelService } from '@/services/channel.service';
 import { useChannelStore } from '@/store/useChannelStore';
 import { toast } from 'sonner';
+import { getApiErrorMessage } from '@/lib/api';
 
 export function useJoinChannel() {
   const navigate = useNavigate();
@@ -19,8 +20,8 @@ export function useJoinChannel() {
       navigate(`/${response.data.username}`);
       toast.success('You joined the channel! 🎉');
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Error joining the channel');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Error joining the channel'));
     },
   });
 }

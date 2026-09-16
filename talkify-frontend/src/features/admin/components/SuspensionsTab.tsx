@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Ban, Check, Loader2, Clock, Infinity, UserX } from 'lucide-react';
+import { Ban, Check, Loader2, Clock, Infinity as InfinityIcon, UserX } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -68,7 +68,7 @@ export function SuspensionsTab() {
 
           {suspension.isPermanent ? (
             <Badge variant="destructive" className="gap-1">
-              <Infinity className="h-3 w-3" />
+              <InfinityIcon className="h-3 w-3" />
               Permanent
             </Badge>
           ) : suspension.isActive ? (

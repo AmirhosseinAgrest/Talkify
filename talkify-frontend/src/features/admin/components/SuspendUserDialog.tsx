@@ -20,11 +20,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Loader2, Ban, Clock, Infinity } from 'lucide-react';
+import { Loader2, Ban, Clock, Infinity as InfinityIcon } from 'lucide-react';
 import { suspensionService } from '@/services/suspension.service';
 import { adminService } from '@/services/admin.service';
 import { toast } from 'sonner';
 import type { User } from '@/types';
+import { getApiErrorMessage } from '@/lib/api';
 
 interface SuspendUserDialogProps {
   open: boolean;
@@ -71,8 +72,8 @@ export function SuspendUserDialog({ open, onOpenChange, user, userId }: SuspendU
       onOpenChange(false);
       resetForm();
     },
-    onError: (error: any) => {
-      toast.error(error.response?.data?.message || 'Failed to suspend user');
+    onError: (error: unknown) => {
+      toast.error(getApiErrorMessage(error, 'Failed to suspend user'));
     },
   });
 
@@ -167,7 +168,7 @@ export function SuspendUserDialog({ open, onOpenChange, user, userId }: SuspendU
                 {DURATION_PRESETS.map((preset) => (
                   <SelectItem key={String(preset.value)} value={String(preset.value)}>
                     <span className="flex items-center gap-2">
-                      {preset.value === 'permanent' && <Infinity className="h-4 w-4" />}
+                      {preset.value === 'permanent' && <InfinityIcon className="h-4 w-4" />}
                       {preset.value === 'custom' && <Clock className="h-4 w-4" />}
                       {preset.label}
                     </span>
