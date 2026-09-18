@@ -3,7 +3,6 @@
 import { X, FileIcon, Image, Film, Mic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
 
 interface UploadingMessageProps {
   file: File;
