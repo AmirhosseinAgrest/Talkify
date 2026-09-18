@@ -16,7 +16,6 @@ interface ImageCardProps {
 export const ImageCard = ({
   imageUrl,
   username,
-  userAvatar,
   caption,
   likes = 0,
   comments = 0,

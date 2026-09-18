@@ -8,7 +8,7 @@ import {
   SheetTitle,
 } from '@/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { User, Settings, Shield, Bell, Palette, LogOut } from 'lucide-react';
+import { User, Settings, Shield, Bell, Palette } from 'lucide-react';
 import { ProfileTab } from './ProfileTab';
 import { AppearanceTab } from './AppearanceTab';
 import { PrivacyTab } from './PrivacyTab';

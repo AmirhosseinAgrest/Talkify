@@ -49,11 +49,11 @@ export const useSocketStore = create<SocketState>((set, get) => ({
       set({ isConnected: true });
     });
 
-    socket.on('disconnect', (reason) => {
+    socket.on('disconnect', () => {
       set({ isConnected: false });
     });
 
-    socket.on('connect_error', (error) => {
+    socket.on('connect_error', () => {
       set({ isConnected: false });
     });
 

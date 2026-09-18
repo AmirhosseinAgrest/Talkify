@@ -1,6 +1,5 @@
 // src/components/common/MessageContextMenu.tsx
 
-import { useState } from 'react';
 import {
   ContextMenu,
   ContextMenuContent,

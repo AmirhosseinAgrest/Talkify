@@ -4,8 +4,6 @@ import { useState, useEffect, useCallback } from 'react';
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
 } from '@/components/ui/sheet';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -23,7 +21,6 @@ import {
   Mail,
   FileText,
   Loader2,
-  UserX,
   UserCheck,
 } from 'lucide-react';
 import { blockService, BlockStatus } from '@/services/block.service';

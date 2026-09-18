@@ -13,7 +13,10 @@ export function AdminLayout() {
     return <Navigate to="/login" replace />;
   }
 
-  if (!user?.isAdmin) {
+  // Admin access follows the application role model: `admin` or `super_admin`.
+  const isAdmin = !!user && (user.role === 'admin' || user.role === 'super_admin');
+
+  if (!isAdmin) {
     return <Navigate to="/chat" replace />;
   }
 

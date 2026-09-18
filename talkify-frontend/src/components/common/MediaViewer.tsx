@@ -1,7 +1,6 @@
 // src/components/common/MediaViewer.tsx
 
-import { useState } from 'react';
-import { X, Download, Play, Pause } from 'lucide-react';
+import { X, Download } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -23,8 +22,6 @@ export function MediaViewer({
   url,
   fileName,
 }: MediaViewerProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-
   const handleDownload = () => {
     const link = document.createElement('a');
     link.href = url;

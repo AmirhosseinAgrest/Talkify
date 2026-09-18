@@ -1,14 +1,13 @@
 // src/pages/admin/AdminPage.tsx
 
 import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   Shield,
   Users,
   Radio,
   Flag,
   Ban,
-  Loader2,
   ArrowRight,
   Megaphone,
   MessageSquare
@@ -17,7 +16,6 @@ import { Navigate, Link } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { UsersTab } from '@/features/admin/components/UsersTab';
 import { ChannelsTab } from '@/features/admin/components/ChannelsTab';
 import { ReportsTab } from '@/features/admin/components/ReportsTab';

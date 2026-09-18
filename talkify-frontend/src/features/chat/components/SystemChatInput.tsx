@@ -1,6 +1,6 @@
 // src/features/chat/components/SystemChatInput.tsx
 
-import { Bot, Lock } from 'lucide-react';
+import { Lock } from 'lucide-react';
 
 export function SystemChatInput() {
   return (
