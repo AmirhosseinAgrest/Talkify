@@ -5,6 +5,37 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.6.0] - 2026-09-18
+
+### Added
+
+* Added frontend lint validation to the GitHub Actions CI workflow.
+* Added a real application-level TypeScript validation step using `tsconfig.app.json`.
+* Added frontend production build validation to CI.
+
+### Changed
+
+* Resolved existing ESLint errors across the frontend codebase.
+* Resolved existing React Hooks rule violations while preserving component behavior.
+* Removed existing unsafe `any` usages identified during the linting cleanup.
+* Removed unused imports, variables, state, and bindings identified by TypeScript and ESLint.
+* Improved TypeScript correctness across existing frontend components and stores.
+* Preserved the existing React, TypeScript, Vite, Tailwind, Radix/shadcn, Zustand, TanStack Query, and Socket.IO architecture.
+
+### Fixed
+
+* Fixed existing frontend TypeScript errors that were previously hidden by the ineffective root-level TypeScript command.
+* Fixed the frontend CI TypeScript command so that it checks the actual application source tree.
+* Fixed existing lint issues in frontend components, hooks, and utility code.
+
+### Engineering
+
+* Frontend TypeScript verification now covers the application source tree rather than relying on a vacuous root configuration.
+* Frontend linting and production builds are now part of the automated CI validation.
+* No frontend framework or state-management architecture was replaced as part of this release.
+
+---
+
 ## [1.5.1] - 2026-06-21
 
 ### Changed

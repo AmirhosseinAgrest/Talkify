@@ -1,6 +1,6 @@
 {
   "name": "talkify-backend",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Talkify Messenger Backend",
   "main": "src/index.js",
   "type": "module",

@@ -6,6 +6,30 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.6.0] - 2026-09-18
+
+### Added
+
+* Added ESLint 9 flat configuration for the backend.
+* Added Prettier configuration for consistent backend formatting.
+* Added `lint`, `lint:fix`, `format`, and `format:check` npm scripts.
+* Added backend lint and formatting validation to the GitHub Actions CI workflow.
+
+### Changed
+
+* Formatted the existing backend codebase with Prettier.
+* Cleaned up existing ESLint warnings without disabling or weakening the configured lint rules.
+* Removed unused imports, variables, and bindings identified by the linting baseline.
+* Preserved the existing Express, Socket.IO, service-layer, and JSON persistence architecture.
+
+### Engineering
+
+* Established a consistent backend code-quality baseline for future development.
+* Added automated backend lint and formatting checks to CI.
+* No backend runtime architecture or persistence model was changed as part of this release.
+
+---
+
 ## [1.5.0] - 2026-05-25
 
 ### 🚀 New Features

@@ -6,6 +6,49 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.6.0] - 2026-09-18
+
+### Added
+
+* Added backend ESLint configuration and linting scripts.
+* Added backend Prettier configuration and formatting scripts.
+* Added GitHub Actions CI workflow for automated validation on pushes and pull requests.
+* Added backend lint and format validation to CI.
+* Added frontend lint, TypeScript type checking, and production build validation to CI.
+
+### Changed
+
+* Improved the project README with accurate setup instructions, environment variables, development workflow, project structure, architecture overview, troubleshooting guidance, and known limitations.
+* Synchronized project package versions with the `v1.5.1` release metadata.
+* Cleaned up backend source formatting and resolved existing ESLint warnings without weakening the linting rules.
+* Cleaned up frontend lint and formatting issues and resolved existing React Hooks and TypeScript-related issues.
+* Replaced the ineffective frontend TypeScript check in CI with an application-level TypeScript check using the project's `tsconfig.app.json`.
+* Removed unused frontend and backend imports, variables, and bindings identified during the engineering baseline cleanup.
+* Preserved the existing application architecture and dependency stack while improving the project's engineering foundation.
+
+### Fixed
+
+* Fixed existing frontend TypeScript errors that were previously not being detected by the CI typecheck command.
+* Fixed existing frontend ESLint errors, including React Hooks rule violations and unsafe `any` usage.
+* Fixed minor frontend issues surfaced during the lint and TypeScript cleanup.
+
+### Documentation
+
+* Documented local development requirements and the two-process development workflow.
+* Documented frontend and backend environment configuration.
+* Documented upload directory requirements and production build steps.
+* Documented current project limitations, including JSON-file persistence and local filesystem uploads.
+* Added clearer development and architecture guidance for contributors.
+
+### Engineering
+
+* Established a consistent backend linting and formatting baseline.
+* Established automated CI validation for the main frontend and backend quality checks.
+* Established a real frontend TypeScript verification step covering the application source tree.
+* Completed the Engineering Foundation phase without introducing a database migration or architectural rewrite.
+
+---
+
 ## [1.5.1] - 2026-06-21
 
 ### Changed (Frontend Only)
