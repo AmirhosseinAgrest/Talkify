@@ -59,13 +59,6 @@ export const suspendUser = async (adminId, userId, duration, reason) => {
     console.error('Failed to send suspension notification:', error);
   }
 
-  await db.createSuspension(suspension);
-
-  await db.updateUser(userId, {
-    isSuspended: true,
-    suspendedUntil: expiresAt,
-  });
-
   return suspension;
 };
 

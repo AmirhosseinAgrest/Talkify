@@ -3,11 +3,13 @@
 import { Router } from 'express';
 import * as userController from '../controllers/user.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
+import { requireNotSuspended } from '../middleware/suspension.middleware.js';
 import { uploadAvatar } from '../middleware/upload.middleware.js';
 
 const router = Router();
 
 router.use(authenticate);
+router.use(requireNotSuspended);
 
 router.get('/search', userController.searchUsers);
 router.get('/:userId', userController.getUser);

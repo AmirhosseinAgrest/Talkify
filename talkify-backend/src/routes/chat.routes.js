@@ -3,11 +3,13 @@
 import { Router } from 'express';
 import * as chatController from '../controllers/chat.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
+import { requireNotSuspended } from '../middleware/suspension.middleware.js';
 import { upload } from '../middleware/upload.middleware.js';
 
 const router = Router();
 
 router.use(authenticate);
+router.use(requireNotSuspended);
 
 router.get('/', chatController.getChats);
 router.post('/', chatController.createChat);

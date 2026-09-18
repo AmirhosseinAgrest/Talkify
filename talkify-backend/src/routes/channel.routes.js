@@ -3,11 +3,13 @@
 import { Router } from 'express';
 import * as channelController from '../controllers/channel.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
+import { requireNotSuspended } from '../middleware/suspension.middleware.js';
 import { uploadAvatar, uploadMessageFile } from '../middleware/upload.middleware.js';
 
 const router = Router();
 
 router.use(authenticate);
+router.use(requireNotSuspended);
 
 router.get('/search', channelController.searchChannels);
 router.get('/my', channelController.getMyChannels);

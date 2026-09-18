@@ -47,6 +47,16 @@ export default function ChatPage() {
 
       setIsLoadingUser(true);
       try {
+        // The backend rejects protected chat routes with 403 while suspended, so the
+        // suspension state is resolved first and the chat lookup is skipped entirely.
+        const suspensionRes = await suspensionService.checkMySuspension();
+        if (suspensionRes.data) {
+          setSuspension(suspensionRes.data);
+          setChatId(null);
+          useChatStore.getState().setActiveChat(null);
+          return;
+        }
+
         const chatRes = await chatService.findOrCreateChat(username);
         setChatId(chatRes.data.id);
         useChatStore.getState().setActiveChat(chatRes.data);
@@ -83,6 +93,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     useChatStore.getState().setMessages([]);
+    setSuspension(null);
   }, [username]);
 
   const checkStatus = async (userId: string) => {
@@ -105,7 +116,6 @@ export default function ChatPage() {
     setEditingMessage(null);
     setIsEditDialogOpen(false);
     setBlockStatus(null);
-    setSuspension(null);
   }, [chatId]);
 
   // Guard placed after every hook so the hook order stays stable for all renders.
@@ -169,6 +179,15 @@ export default function ChatPage() {
     return <LoadingSpinner className="flex-1" />;
   }
 
+  if (suspension) {
+    return (
+      <div className="h-full flex flex-col">
+        <ChatHeader />
+        <SuspendedView suspension={suspension} />
+      </div>
+    );
+  }
+
   if (!chatId) {
     return (
       <EmptyState
@@ -180,15 +199,6 @@ export default function ChatPage() {
 
   if (isLoading || isCheckingStatus) {
     return <LoadingSpinner className="flex-1" />;
-  }
-
-  if (suspension) {
-    return (
-      <div className="h-full flex flex-col">
-        <ChatHeader />
-        <SuspendedView suspension={suspension} />
-      </div>
-    );
   }
 
   if (blockStatus?.isBlocked) {

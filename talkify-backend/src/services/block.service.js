@@ -36,7 +36,6 @@ export const blockUser = async (blockerId, blockedId) => {
     console.error('Failed to send block notification:', error);
   }
 
-  await db.createBlock(blockData);
   return blockData;
 };
 

@@ -3,10 +3,12 @@
 import { Router } from 'express';
 import * as blockController from '../controllers/block.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
+import { requireNotSuspended } from '../middleware/suspension.middleware.js';
 
 const router = Router();
 
 router.use(authenticate);
+router.use(requireNotSuspended);
 
 router.post('/', blockController.blockUser);
 router.delete('/', blockController.unblockUser);
