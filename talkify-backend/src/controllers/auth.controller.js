@@ -48,7 +48,16 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    await authService.logout(req.userId);
+    await authService.logout(req.userId, req.sessionId);
+
+    const io = req.app.get('io');
+    if (io) {
+      for (const socket of io.sockets.sockets.values()) {
+        if (socket.sessionId === req.sessionId) {
+          socket.disconnect(true);
+        }
+      }
+    }
 
     return res.json(formatResponse(true, null, 'Logout successful'));
   } catch (error) {

@@ -1,6 +1,6 @@
 // src/middleware/auth.middleware.js
 
-import { verifyToken } from '../services/auth.service.js';
+import { authenticateToken } from '../services/auth.service.js';
 import { formatResponse } from '../utils/helpers.js';
 
 export const authenticate = async (req, res, next) => {
@@ -12,9 +12,10 @@ export const authenticate = async (req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1];
-    const decoded = verifyToken(token);
+    const { userId, sessionId } = await authenticateToken(token);
 
-    req.userId = decoded.userId;
+    req.userId = userId;
+    req.sessionId = sessionId;
     next();
   } catch {
     return res.status(401).json(formatResponse(false, null, 'Invalid token'));

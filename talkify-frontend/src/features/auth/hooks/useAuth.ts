@@ -3,13 +3,18 @@
 import { useAuthStore } from '@/store/useAuthStore';
 import { useNavigate } from 'react-router-dom';
 import { disconnectSocket } from '@/lib/socket';
+import { authService } from '@/services/auth.service';
 import { toast } from 'sonner';
 
 export function useAuth() {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout: logoutStore } = useAuthStore();
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await authService.logout();
+    } catch {
+    }
     disconnectSocket();
     logoutStore();
     toast.success('Logged out successfully');

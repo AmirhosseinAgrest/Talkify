@@ -54,13 +54,31 @@ const parseDeviceFromUserAgent = (userAgent) => {
 };
 
 const generateToken = (userId, sessionId) => {
-  const payload = { userId };
-  if (sessionId) payload.sessionId = sessionId;
+  const payload = { userId, sessionId };
 
-  return jwt.sign(payload, process.env.JWT_SECRET, {
+  const token = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
+
+  const { exp } = jwt.decode(token);
+  const expiresAt = exp ? new Date(exp * 1000).toISOString() : null;
+
+  return { token, expiresAt };
 };
+
+const createSession = ({ sessionId, device, country, ipHash, now, expiresAt }) => ({
+  id: sessionId,
+  device,
+  country,
+  ipHash,
+  isActive: true,
+  createdAt: now,
+  lastActiveAt: now,
+  expiresAt,
+});
+
+const pruneExpiredSessions = (sessions, now) =>
+  (sessions || []).filter((s) => !s.expiresAt || new Date(s.expiresAt) > new Date(now));
 
 export const register = async ({ username, email, password }) => {
   const existingEmail = await db.getUserByEmail(email);
@@ -107,6 +125,19 @@ export const register = async ({ username, email, password }) => {
     sessions: [],
   };
 
+  const sessionId = uuidv4();
+  const { token, expiresAt } = generateToken(newUser.id, sessionId);
+  newUser.sessions.push(
+    createSession({
+      sessionId,
+      device: 'Unknown Browser on Unknown OS',
+      country: 'UNKNOWN',
+      ipHash: null,
+      now,
+      expiresAt,
+    })
+  );
+
   await db.createUser(newUser);
 
   try {
@@ -115,7 +146,6 @@ export const register = async ({ username, email, password }) => {
     console.error('Failed to send welcome message:', error);
   }
 
-  const token = generateToken(newUser.id);
   const { password: _, ...userWithoutPassword } = newUser;
 
   return { user: userWithoutPassword, token };
@@ -146,16 +176,8 @@ export const login = async ({ email, password, ip, userAgent }) => {
     createdAt: now,
   };
 
-  const sessionId = uuidv4();
-  const session = {
-    id: sessionId,
-    device,
-    country,
-    ipHash,
-    isActive: true,
-    createdAt: now,
-    lastActiveAt: now,
-  };
+  const { token, expiresAt } = generateToken(user.id, sessionId);
+  const session = createSession({ sessionId, device, country, ipHash, now, expiresAt });
 
   const updatedUser = {
     ...user,
@@ -163,12 +185,11 @@ export const login = async ({ email, password, ip, userAgent }) => {
     lastSeen: now,
     country: user.country || (country && country !== 'UNKNOWN' ? country : user.country || null),
     loginLogs: [...(user.loginLogs || []), loginLog],
-    sessions: [...(user.sessions || []), session],
+    sessions: [...pruneExpiredSessions(user.sessions, now), session],
   };
 
   await db.updateUser(user.id, updatedUser);
 
-  const token = generateToken(user.id, sessionId);
   const { password: _, ...userWithoutPassword } = updatedUser;
 
   return {
@@ -180,24 +201,21 @@ export const login = async ({ email, password, ip, userAgent }) => {
   };
 };
 
-export const logout = async (userId) => {
+export const logout = async (userId, sessionId) => {
   const now = new Date().toISOString();
 
   const user = await db.getUserById(userId);
   if (!user) return;
 
-  const updatedUser = {
-    ...user,
+  const sessions = pruneExpiredSessions(user.sessions, now).map((s) =>
+    s.id === sessionId ? { ...s, isActive: false, lastActiveAt: now } : s
+  );
+
+  await db.updateUser(userId, {
     isOnline: false,
     lastSeen: now,
-    sessions: (user.sessions || []).map((s) => ({
-      ...s,
-      isActive: false,
-      lastActiveAt: now,
-    })),
-  };
-
-  await db.updateUser(userId, updatedUser);
+    sessions,
+  });
 };
 
 export const getProfile = async (userId) => {
@@ -216,4 +234,22 @@ export const verifyToken = (token) => {
   } catch {
     throw formatError('Invalid token', 401);
   }
+};
+
+export const authenticateToken = async (token) => {
+  const decoded = verifyToken(token);
+  const { userId, sessionId } = decoded;
+
+  if (!userId || !sessionId) {
+    throw formatError('Invalid token', 401);
+  }
+
+  const user = await db.getUserById(userId);
+  const session = user && (user.sessions || []).find((s) => s.id === sessionId);
+
+  if (!session || !session.isActive) {
+    throw formatError('Invalid token', 401);
+  }
+
+  return { userId, sessionId };
 };
