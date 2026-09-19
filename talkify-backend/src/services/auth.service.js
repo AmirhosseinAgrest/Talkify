@@ -176,6 +176,7 @@ export const login = async ({ email, password, ip, userAgent }) => {
     createdAt: now,
   };
 
+  const sessionId = uuidv4();
   const { token, expiresAt } = generateToken(user.id, sessionId);
   const session = createSession({ sessionId, device, country, ipHash, now, expiresAt });
 

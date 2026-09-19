@@ -14,6 +14,7 @@ export function useAuth() {
     try {
       await authService.logout();
     } catch {
+      void 0;
     }
     disconnectSocket();
     logoutStore();
