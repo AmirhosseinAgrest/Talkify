@@ -1,7 +1,7 @@
 // src/controllers/user.controller.js
 
 import * as db from '../services/db.service.js';
-import { formatResponse } from '../utils/helpers.js';
+import { formatResponse, toPublicUser } from '../utils/helpers.js';
 import bcrypt from 'bcryptjs';
 
 export const searchUsers = async (req, res, next) => {
@@ -13,14 +13,10 @@ export const searchUsers = async (req, res, next) => {
 
     if (q) {
       const query = q.toLowerCase();
-      filteredUsers = filteredUsers.filter(
-        (user) =>
-          user.username.toLowerCase().includes(query) || user.email.toLowerCase().includes(query)
-      );
+      filteredUsers = filteredUsers.filter((user) => user.username.toLowerCase().includes(query));
     }
 
-    const safeUsers = filteredUsers.map(({ password: _, ...user }) => user);
-    res.json(formatResponse(true, safeUsers));
+    res.json(formatResponse(true, filteredUsers.map(toPublicUser)));
   } catch (error) {
     next(error);
   }
@@ -34,8 +30,7 @@ export const getUser = async (req, res, next) => {
       return res.status(404).json(formatResponse(false, null, 'User not found'));
     }
 
-    const { password: _, ...safeUser } = user;
-    res.json(formatResponse(true, safeUser));
+    res.json(formatResponse(true, toPublicUser(user)));
   } catch (error) {
     next(error);
   }

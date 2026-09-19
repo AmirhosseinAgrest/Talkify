@@ -17,8 +17,6 @@ import {
   Ban,
   Calendar,
   AtSign,
-  Phone,
-  Mail,
   FileText,
   Loader2,
   UserCheck,
@@ -137,20 +135,6 @@ export function UserInfoDialog({ open, onOpenChange, user, chatId }: UserInfoDia
                   <AtSign className="h-4 w-4 text-muted-foreground" />
                   <span>@{user.username}</span>
                 </div>
-
-                {user.email && (
-                  <div className="flex items-center gap-3 text-sm">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span>{user.email}</span>
-                  </div>
-                )}
-
-                {user.phone && (
-                  <div className="flex items-center gap-3 text-sm">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span>{user.phone}</span>
-                  </div>
-                )}
 
                 <div className="flex items-center gap-3 text-sm">
                   <Calendar className="h-4 w-4 text-muted-foreground" />

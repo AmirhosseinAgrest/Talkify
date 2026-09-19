@@ -54,7 +54,7 @@ export function NewChatDialog() {
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search username or email..."
+            placeholder="Search username..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9"
@@ -119,7 +119,7 @@ function UserItem({ user, onSelect, isLoading }: UserItemProps) {
 
       <div className="flex-1 text-right">
         <p className="font-medium">{user.username}</p>
-        <p className="text-sm text-muted-foreground">{user.email}</p>
+        <p className="text-sm text-muted-foreground">@{user.username}</p>
       </div>
 
       {user.isOnline ? (

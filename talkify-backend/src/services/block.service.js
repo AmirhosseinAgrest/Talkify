@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import * as db from './db.service.js';
-import { formatError } from '../utils/helpers.js';
+import { formatError, toPublicUser } from '../utils/helpers.js';
 import * as systemService from './system.service.js';
 
 export const blockUser = async (blockerId, blockedId) => {
@@ -55,9 +55,8 @@ export const getBlockedUsers = async (userId) => {
     blocks.map(async (block) => {
       const user = await db.getUserById(block.blockedId);
       if (user) {
-        const { password: _, ...safeUser } = user;
         return {
-          ...safeUser,
+          ...toPublicUser(user),
           blockedAt: block.createdAt,
         };
       }

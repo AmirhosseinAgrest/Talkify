@@ -2,7 +2,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import * as db from './db.service.js';
-import { formatError } from '../utils/helpers.js';
+import { formatError, toPublicUser } from '../utils/helpers.js';
 import { MESSAGE_STATUS, MESSAGE_TYPE } from '../utils/constants.js';
 import * as systemService from './system.service.js';
 
@@ -14,11 +14,7 @@ export const getUserChats = async (userId) => {
       const participants = await Promise.all(
         chat.participantIds.map(async (id) => {
           const user = await db.getUserById(id);
-          if (user) {
-            const { password: _, ...userWithoutPassword } = user;
-            return userWithoutPassword;
-          }
-          return null;
+          return toPublicUser(user);
         })
       );
 
@@ -58,11 +54,7 @@ export const getChatById = async (chatId, userId) => {
   const participants = await Promise.all(
     chat.participantIds.map(async (id) => {
       const user = await db.getUserById(id);
-      if (user) {
-        const { password: _, ...userWithoutPassword } = user;
-        return userWithoutPassword;
-      }
-      return null;
+      return toPublicUser(user);
     })
   );
 
