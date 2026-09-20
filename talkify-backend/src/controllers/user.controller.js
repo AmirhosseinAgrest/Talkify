@@ -2,6 +2,7 @@
 
 import * as db from '../services/db.service.js';
 import { formatResponse, toPublicUser } from '../utils/helpers.js';
+import { deleteAvatarFile } from '../middleware/upload.middleware.js';
 import bcrypt from 'bcryptjs';
 
 export const searchUsers = async (req, res, next) => {
@@ -85,6 +86,11 @@ export const updateAvatar = async (req, res, next) => {
 
     const avatarUrl = `/uploads/avatars/${file.filename}`;
 
+    const currentUser = await db.getUserById(userId);
+    if (currentUser?.avatar && currentUser.avatar !== avatarUrl) {
+      deleteAvatarFile(currentUser.avatar);
+    }
+
     const updatedUser = await db.updateUser(userId, {
       avatar: avatarUrl,
       updatedAt: new Date().toISOString(),
@@ -100,6 +106,11 @@ export const updateAvatar = async (req, res, next) => {
 export const deleteAvatar = async (req, res, next) => {
   try {
     const userId = req.userId;
+
+    const currentUser = await db.getUserById(userId);
+    if (currentUser?.avatar) {
+      deleteAvatarFile(currentUser.avatar);
+    }
 
     const updatedUser = await db.updateUser(userId, {
       avatar: null,

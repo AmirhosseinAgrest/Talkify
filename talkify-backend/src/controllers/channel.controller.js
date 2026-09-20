@@ -1,14 +1,9 @@
 // src/controllers/channel.controller.js
 
 import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
 import * as channelService from '../services/channel.service.js';
 import { formatResponse } from '../utils/helpers.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const uploadsDir = path.join(__dirname, '../../data/uploads');
+import { deleteAvatarFile, getMessageType } from '../middleware/upload.middleware.js';
 
 export const createChannel = async (req, res, next) => {
   try {
@@ -116,7 +111,6 @@ export const sendMessageWithFile = async (req, res, next) => {
 
     let fileData = null;
     if (file) {
-      const { getMessageType } = await import('../middleware/upload.middleware.js');
       const type = getMessageType(file.mimetype);
       fileData = {
         type,
@@ -194,19 +188,6 @@ export const updateChannel = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-};
-
-const deleteAvatarFile = (avatarUrl) => {
-  if (!avatarUrl || avatarUrl.startsWith('data:image')) return false;
-
-  const fileName = path.basename(avatarUrl);
-  const avatarPath = path.join(uploadsDir, 'avatars', fileName);
-
-  if (fs.existsSync(avatarPath)) {
-    fs.unlinkSync(avatarPath);
-    return true;
-  }
-  return false;
 };
 
 export const uploadAvatar = async (req, res, next) => {

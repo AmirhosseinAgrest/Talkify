@@ -29,6 +29,7 @@ export const SYSTEM_ROLES = {
 
 export const UPLOAD_CONFIG = {
   MAX_FILE_SIZE: 50 * 1024 * 1024,
+  MAX_AVATAR_SIZE: 5 * 1024 * 1024,
   ALLOWED_IMAGE_TYPES: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
   ALLOWED_VIDEO_TYPES: ['video/mp4', 'video/webm', 'video/quicktime'],
   ALLOWED_AUDIO_TYPES: ['audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/webm'],

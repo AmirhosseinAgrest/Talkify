@@ -10,6 +10,7 @@ import dotenv from 'dotenv';
 import routes from './routes/index.js';
 import { initializeSocket } from './socket/index.js';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware.js';
+import { ensureUploadDirs } from './middleware/upload.middleware.js';
 
 dotenv.config();
 
@@ -52,6 +53,13 @@ const io = initializeSocket(httpServer);
 app.set('io', io);
 
 const PORT = process.env.PORT || 3001;
+
+try {
+  await ensureUploadDirs();
+} catch (error) {
+  console.error('Failed to prepare upload directories:', error.message);
+  process.exit(1);
+}
 
 httpServer.listen(PORT, () => {
   console.log(`
