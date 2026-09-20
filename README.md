@@ -135,8 +135,9 @@ Required variable:
 | Variable | Required | Description |
 |---|---|---|
 | `JWT_SECRET` | Yes | HMAC key for signing/verifying JWTs |
+| `CLIENT_URL` | In production | Allowed frontend origin(s) for CORS (REST + Socket.IO), comma-separated. Defaults to `http://localhost:5173` outside production; wildcard is rejected. |
 
-Other variables (`PORT`, `CLIENT_URL`, `NODE_ENV`, `JWT_EXPIRES_IN`) have defaults and are documented in `.env.example`.
+Other variables (`PORT`, `NODE_ENV`, `JWT_EXPIRES_IN`) have defaults and are documented in `.env.example`.
 
 ### Frontend
 

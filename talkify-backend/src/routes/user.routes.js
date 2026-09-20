@@ -4,6 +4,7 @@ import { Router } from 'express';
 import * as userController from '../controllers/user.controller.js';
 import { authenticate } from '../middleware/auth.middleware.js';
 import { requireNotSuspended } from '../middleware/suspension.middleware.js';
+import { passwordLimiter } from '../middleware/security.middleware.js';
 import { uploadAvatar } from '../middleware/upload.middleware.js';
 
 const router = Router();
@@ -18,7 +19,7 @@ router.put('/profile', userController.updateProfile);
 router.put('/profile/avatar', uploadAvatar.single('avatar'), userController.updateAvatar);
 router.delete('/profile/avatar', userController.deleteAvatar);
 
-router.put('/password', userController.changePassword);
+router.put('/password', passwordLimiter, userController.changePassword);
 
 router.get('/settings', userController.getSettings);
 router.put('/settings', userController.updateSettings);

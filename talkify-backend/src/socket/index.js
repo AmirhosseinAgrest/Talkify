@@ -5,12 +5,16 @@ import { authenticateToken } from '../services/auth.service.js';
 import * as suspensionService from '../services/suspension.service.js';
 import { handleConnection, SUSPENDED_MESSAGE } from './handlers.js';
 
-export const initializeSocket = (httpServer) => {
+export const initializeSocket = (httpServer, { checkOrigin, originAllowed }) => {
   const io = new Server(httpServer, {
     cors: {
-      origin: process.env.CLIENT_URL,
+      origin: checkOrigin,
       methods: ['GET', 'POST'],
       credentials: true,
+    },
+    allowRequest: (req, callback) => {
+      const allowed = originAllowed(req.headers.origin);
+      callback(allowed ? null : 'origin not allowed', allowed);
     },
   });
 
@@ -28,18 +32,6 @@ export const initializeSocket = (httpServer) => {
       next();
     } catch {
       next(new Error('Invalid token'));
-    }
-  });
-
-  io.use(async (socket, next) => {
-    try {
-      const suspension = await suspensionService.checkSuspension(socket.userId);
-      if (suspension) {
-        return next(new Error(SUSPENDED_MESSAGE));
-      }
-      next();
-    } catch (error) {
-      next(error);
     }
   });
 
