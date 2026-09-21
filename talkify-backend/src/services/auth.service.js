@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 
 import * as db from './db.service.js';
+import { config } from '../config/env.js';
 import { formatError } from '../utils/helpers.js';
 import { SYSTEM_ROLES } from '../utils/constants.js';
 import * as systemService from './system.service.js';
@@ -15,20 +16,30 @@ const hashIp = (ip) => {
   return crypto.createHash('sha256').update(ip).digest('hex');
 };
 
+const GEOIP_TIMEOUT_MS = 2000;
+
 const detectCountryFromIp = async (ip) => {
   if (!ip) return 'UNKNOWN';
 
   try {
-    const response = await fetch(`https://ipapi.co/${ip}/country/`);
-    const country = await response.text();
+    const response = await fetch(`https://ipapi.co/${encodeURIComponent(ip)}/country/`, {
+      signal: AbortSignal.timeout(GEOIP_TIMEOUT_MS),
+    });
 
-    if (!country || country.length !== 2) {
+    if (!response.ok) {
+      return 'UNKNOWN';
+    }
+
+    const country = (await response.text()).trim();
+
+    if (!/^[A-Za-z]{2}$/.test(country)) {
       return 'UNKNOWN';
     }
 
     return country.toUpperCase();
   } catch (error) {
-    console.error('GeoIP lookup failed:', error);
+    const reason = error?.name === 'TimeoutError' ? 'timeout' : error?.name || 'error';
+    console.warn(`GeoIP lookup skipped (${reason})`);
     return 'UNKNOWN';
   }
 };
@@ -56,8 +67,8 @@ const parseDeviceFromUserAgent = (userAgent) => {
 const generateToken = (userId, sessionId) => {
   const payload = { userId, sessionId };
 
-  const token = jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN,
+  const token = jwt.sign(payload, config.jwtSecret, {
+    expiresIn: config.jwtExpiresIn,
   });
 
   const { exp } = jwt.decode(token);
@@ -231,7 +242,7 @@ export const getProfile = async (userId) => {
 
 export const verifyToken = (token) => {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
+    return jwt.verify(token, config.jwtSecret);
   } catch {
     throw formatError('Invalid token', 401);
   }

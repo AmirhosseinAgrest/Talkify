@@ -27,9 +27,7 @@ export const login = async (req, res, next) => {
       return res.status(400).json(formatResponse(false, null, 'Email and password are required'));
     }
 
-    const ipHeader = req.headers['x-forwarded-for'];
-    const ip =
-      (Array.isArray(ipHeader) ? ipHeader[0] : ipHeader?.split(',')[0]?.trim()) || req.ip || null;
+    const ip = req.ip || null;
 
     const userAgent = req.headers['user-agent'] || 'unknown';
 

@@ -8,9 +8,8 @@ const DEV_ORIGIN = 'http://localhost:5173';
 // Allowed browser origins come from CLIENT_URL (comma-separated list supported).
 // Development falls back to the Vite dev server; production must be explicit and
 // never falls back to a wildcard or a guessed domain.
-export const resolveAllowedOrigins = () => {
-  const raw = process.env.CLIENT_URL || '';
-  const origins = raw
+export const resolveAllowedOrigins = (clientUrl, nodeEnv) => {
+  const origins = (clientUrl || '')
     .split(',')
     .map((o) => o.trim().replace(/\/+$/, ''))
     .filter(Boolean);
@@ -20,10 +19,24 @@ export const resolveAllowedOrigins = () => {
   }
 
   if (origins.length === 0) {
-    if (process.env.NODE_ENV === 'production') {
+    if (nodeEnv === 'production') {
       throw new Error('CLIENT_URL must be set in production (allowed frontend origin)');
     }
     return [DEV_ORIGIN];
+  }
+
+  const invalid = origins.filter((o) => {
+    try {
+      const url = new URL(o);
+      return !['http:', 'https:'].includes(url.protocol) || url.pathname !== '/' || url.search;
+    } catch {
+      return true;
+    }
+  });
+  if (invalid.length > 0) {
+    throw new Error(
+      `CLIENT_URL entries must be origins like https://app.example.com (invalid: ${invalid.join(', ')})`
+    );
   }
 
   return origins;

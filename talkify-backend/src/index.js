@@ -6,8 +6,8 @@ import helmet from 'helmet';
 import { createServer } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
 
+import { config } from './config/env.js';
 import routes from './routes/index.js';
 import { initializeSocket } from './socket/index.js';
 import { errorHandler, notFoundHandler } from './middleware/error.middleware.js';
@@ -16,10 +16,7 @@ import {
   apiLimiter,
   createOriginChecker,
   isOriginAllowed,
-  resolveAllowedOrigins,
 } from './middleware/security.middleware.js';
-
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,7 +24,9 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const httpServer = createServer(app);
 
-const allowedOrigins = resolveAllowedOrigins();
+app.set('trust proxy', config.trustProxy);
+
+const { allowedOrigins } = config;
 const checkOrigin = createOriginChecker(allowedOrigins);
 const originAllowed = (origin) => isOriginAllowed(allowedOrigins, origin);
 
@@ -67,7 +66,7 @@ app.use(errorHandler);
 const io = initializeSocket(httpServer, { checkOrigin, originAllowed });
 app.set('io', io);
 
-const PORT = process.env.PORT || 3001;
+const PORT = config.port;
 
 try {
   await ensureUploadDirs();

@@ -134,10 +134,11 @@ Required variable:
 
 | Variable | Required | Description |
 |---|---|---|
-| `JWT_SECRET` | Yes | HMAC key for signing/verifying JWTs |
-| `CLIENT_URL` | In production | Allowed frontend origin(s) for CORS (REST + Socket.IO), comma-separated. Defaults to `http://localhost:5173` outside production; wildcard is rejected. |
+| `JWT_SECRET` | Yes | HMAC key for signing/verifying JWTs. Production requires a random value of 32+ characters (`openssl rand -hex 32`); placeholders are rejected. |
+| `CLIENT_URL` | In production | Allowed frontend origin(s) for CORS (REST + Socket.IO), comma-separated, e.g. `https://app.example.com`. Defaults to `http://localhost:5173` outside production; wildcard is rejected. |
+| `TRUST_PROXY` | Behind a reverse proxy | Number of proxy hops (e.g. `1` for nginx/Caddy/one load balancer) whose `X-Forwarded-For` should be trusted for the client IP used by rate limiting and login logs. Leave unset for direct connections; `true` is rejected. |
 
-Other variables (`PORT`, `NODE_ENV`, `JWT_EXPIRES_IN`) have defaults and are documented in `.env.example`.
+Other variables (`PORT`, `NODE_ENV`, `JWT_EXPIRES_IN`) have defaults and are documented in `.env.example`. Configuration is validated at startup and the server exits with a variable-specific message if something is missing or malformed.
 
 ### Frontend
 
