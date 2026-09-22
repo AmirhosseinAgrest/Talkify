@@ -230,12 +230,30 @@ export const deleteAccount = async (req, res, next) => {
       return res.status(400).json(formatResponse(false, null, 'Incorrect password'));
     }
 
+    const now = new Date().toISOString();
+
+    const sessions = (user.sessions || []).map((s) =>
+      s.isActive ? { ...s, isActive: false, lastActiveAt: now } : s
+    );
+
     await db.updateUser(userId, {
       isDeleted: true,
-      deletedAt: new Date().toISOString(),
+      deletedAt: now,
       email: `deleted_${userId}@deleted.com`,
       username: `deleted_${userId}`,
+      isOnline: false,
+      lastSeen: now,
+      sessions,
     });
+
+    const io = req.app.get('io');
+    if (io) {
+      for (const socket of io.sockets.sockets.values()) {
+        if (socket.userId === userId) {
+          socket.disconnect(true);
+        }
+      }
+    }
 
     res.json(formatResponse(true, null, 'Account deleted'));
   } catch (error) {

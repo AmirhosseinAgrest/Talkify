@@ -6,6 +6,26 @@ import { formatError, toPublicUser } from '../utils/helpers.js';
 import { MESSAGE_STATUS, MESSAGE_TYPE } from '../utils/constants.js';
 import * as systemService from './system.service.js';
 
+// Direct-chat block rule shared by REST and Socket.IO: if either participant has
+// blocked the other, no direct chat may be created/found and no message may be sent.
+// The response is deliberately generic so the caller cannot tell who blocked whom.
+const assertNotBlocked = async (userId, otherUserId) => {
+  const [blockedByMe, blockedMe] = await Promise.all([
+    db.isBlocked(userId, otherUserId),
+    db.isBlocked(otherUserId, userId),
+  ]);
+  if (blockedByMe || blockedMe) {
+    throw formatError('You do not have access to this chat', 403);
+  }
+};
+
+const assertCanMessageChat = async (chat, senderId) => {
+  const others = chat.participantIds.filter((id) => id !== senderId);
+  for (const otherId of others) {
+    await assertNotBlocked(senderId, otherId);
+  }
+};
+
 export const getUserChats = async (userId) => {
   const chats = await db.getChatsByUserId(userId);
 
@@ -74,6 +94,8 @@ export const createChat = async (userId, participantId) => {
     throw formatError('User not found', 404);
   }
 
+  await assertNotBlocked(userId, participantId);
+
   const existingChat = await db.getChatByParticipants(userId, participantId);
   if (existingChat) {
     return await getChatById(existingChat.id, userId);
@@ -122,6 +144,8 @@ export const sendMessage = async (chatId, senderId, content, type = MESSAGE_TYPE
   if (!chat.participantIds.includes(senderId)) {
     throw formatError('You do not have access to this chat', 403);
   }
+
+  await assertCanMessageChat(chat, senderId);
 
   const isSystem = await systemService.isSystemChat(chatId);
   if (isSystem) {
@@ -236,6 +260,9 @@ export const sendMessageWithFile = async (chatId, senderId, content, file, reply
   if (!chat.participantIds.includes(senderId)) {
     throw formatError('You do not have access to this chat', 403);
   }
+
+  await assertCanMessageChat(chat, senderId);
+
   let replyTo = null;
   if (replyToId) {
     const replyMessage = await db.getMessageById(replyToId);
@@ -295,6 +322,8 @@ export const findOrCreateChat = async (userId, targetUserId) => {
   if (userId === targetUserId) {
     throw formatError('Cannot chat with yourself', 400);
   }
+
+  await assertNotBlocked(userId, targetUserId);
 
   const existingChat = await db.getChatByParticipants(userId, targetUserId);
   if (existingChat) {

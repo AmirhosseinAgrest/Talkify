@@ -257,7 +257,11 @@ export const authenticateToken = async (token) => {
   }
 
   const user = await db.getUserById(userId);
-  const session = user && (user.sessions || []).find((s) => s.id === sessionId);
+  if (!user || user.isDeleted) {
+    throw formatError('Invalid token', 401);
+  }
+
+  const session = (user.sessions || []).find((s) => s.id === sessionId);
 
   if (!session || !session.isActive) {
     throw formatError('Invalid token', 401);
