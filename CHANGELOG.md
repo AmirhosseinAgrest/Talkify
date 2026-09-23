@@ -6,6 +6,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.6.1] - 2026-09-23
+
+### Security
+- Enforced account suspension checks across protected REST and Socket.IO actions.
+- Added an allowlisted public user DTO to prevent exposure of private account, session, device, login, and contact data.
+- Added session-bound JWT authentication and session revocation on logout, including disconnecting matching Socket.IO sessions.
+- Hardened file uploads with UUID-based filenames, magic-byte validation, canonical extensions, path traversal protection, upload directory initialization, and safer upload error handling.
+- Added an HTTP security baseline with Helmet, request body limits, authentication/password/API rate limits, and an explicit CORS allowlist shared with Socket.IO.
+- Added runtime configuration validation for `JWT_SECRET`, `CLIENT_URL`, `PORT`, `JWT_EXPIRES_IN`, and `NODE_ENV`.
+- Added explicit `TRUST_PROXY` handling and proxy-aware client IP processing via `req.ip`.
+- Added a timeout and safe fallback for GeoIP lookup requests.
+- Enforced blocking in both directions across chat creation, find-or-create, existing chat messaging, REST text/file messaging, and Socket.IO messaging.
+- Deleted accounts now deactivate active sessions and disconnect live sockets; deleted users can no longer authenticate with existing tokens.
+
+### Fixed
+- Removed duplicate persistence writes during account suspension and blocking operations.
+- Prevented blocked users from continuing to send messages through existing conversations.
+
+### Changed
+- Production deployments now require an explicit `CLIENT_URL` and a non-placeholder `JWT_SECRET` with at least 32 characters.
+- `TRUST_PROXY=true` is rejected; deployments behind a reverse proxy must configure an explicit supported trust-proxy value.
+- Tokens without the new session binding are rejected, so existing users may need to log in again after upgrading.
+- Upload filenames are generated server-side rather than being derived from client-provided filenames.
+
+---
+
 ## [1.6.0] - 2026-09-18
 
 ### Added

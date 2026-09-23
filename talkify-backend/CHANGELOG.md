@@ -6,6 +6,32 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.6.1] - 2026-09-23
+
+### Security
+- Enforced account suspension checks across protected REST routes and Socket.IO actions.
+- Added an allowlisted public user DTO to prevent private account, session, device, login, and contact data from being exposed through public user endpoints.
+- Added session-bound JWT authentication with per-session logout revocation and Socket.IO session disconnect handling.
+- Rejected legacy sessionless authentication tokens.
+- Hardened uploads with startup directory initialization, UUID-based filenames, magic-byte validation, canonical extensions, path traversal protection, and safer Multer/multipart error handling.
+- Added Helmet, explicit JSON/urlencoded body limits, authentication/password/API rate limits, and an explicit CORS allowlist shared with Socket.IO.
+- Added centralized environment validation for `JWT_SECRET`, `CLIENT_URL`, `PORT`, `JWT_EXPIRES_IN`, and `NODE_ENV`.
+- Added explicit `TRUST_PROXY` handling and `req.ip`-based client IP processing.
+- Added a timeout and safe fallback for GeoIP lookups.
+- Enforced block checks in both directions for chat creation, find-or-create, existing chat messaging, REST text/file messaging, and Socket.IO messaging.
+- Deleted accounts now deactivate all active sessions and disconnect live sockets; authentication rejects deleted accounts.
+
+### Fixed
+- Removed duplicate persistence writes during suspension and blocking operations.
+- Prevented blocked users from sending new messages through existing chats.
+
+### Changed
+- Production configuration now fails fast when `CLIENT_URL` is missing or `JWT_SECRET` is invalid.
+- `TRUST_PROXY=true` is rejected in favor of explicit supported configuration.
+- Authentication tokens must contain a session binding.
+
+---
+
 ## [1.6.0] - 2026-09-18
 
 ### Added

@@ -5,6 +5,19 @@ This project follows **Keep a Changelog** and adheres to **Semantic Versioning**
 
 ---
 
+## [1.6.1] - 2026-09-23
+
+### Security
+- Updated authentication state handling to await backend logout/session revocation before clearing local authentication state.
+- Updated user-facing profile and user information surfaces to align with the hardened public-user data model and avoid displaying private contact information.
+- Updated new-chat and chat flows to work with the hardened user endpoint and suspension/blocking behavior.
+
+### Fixed
+- Removed frontend assumptions that depended on private user fields no longer exposed by public user endpoints.
+- Updated chat creation/messaging flows to respect the hardened account and access-control behavior introduced in the backend.
+
+---
+
 ## [1.6.0] - 2026-09-18
 
 ### Added
